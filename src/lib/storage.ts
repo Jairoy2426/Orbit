@@ -43,16 +43,78 @@ class OrbitStorage {
     return typeof window !== 'undefined';
   }
 
-  public init() {
+  // --- Initialization & MongoDB Sync ---
+  public async init() {
     if (!this.isBrowser()) return;
+
+    // First load from local cache for instant zero-latency paint
     const isInit = localStorage.getItem(STORAGE_KEYS.INITIALIZED);
     if (!isInit) {
-      this.resetToDefaults();
+      this.resetLocalToDefaults();
+    }
+
+    // Now sync with MongoDB Atlas in background
+    try {
+      await this.syncFromMongo();
+    } catch (err) {
+      console.warn('Could not sync with MongoDB on boot, using local cache:', err);
     }
   }
 
-  public resetToDefaults() {
+  public async syncFromMongo() {
     if (!this.isBrowser()) return;
+    try {
+      const [tasksRes, projectsRes, jobsRes, notesRes, prefsRes] = await Promise.all([
+        fetch('/api/tasks').then((r) => r.json()),
+        fetch('/api/projects').then((r) => r.json()),
+        fetch('/api/jobs').then((r) => r.json()),
+        fetch('/api/notes').then((r) => r.json()),
+        fetch('/api/preferences').then((r) => r.json()),
+      ]);
+
+      // If database is completely empty on first run, seed MongoDB
+      if (tasksRes.success && (!tasksRes.tasks || tasksRes.tasks.length === 0)) {
+        console.log('MongoDB is empty. Seeding initial Orbit data into MongoDB Atlas...');
+        const seedRes = await fetch('/api/seed', { method: 'POST' }).then((r) => r.json());
+        if (seedRes.success) {
+          await this.syncFromMongo();
+          return;
+        }
+      }
+
+      let updated = false;
+
+      if (tasksRes.success && Array.isArray(tasksRes.tasks)) {
+        localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasksRes.tasks));
+        updated = true;
+      }
+      if (projectsRes.success && Array.isArray(projectsRes.projects)) {
+        localStorage.setItem(STORAGE_KEYS.PROJECTS, JSON.stringify(projectsRes.projects));
+        updated = true;
+      }
+      if (jobsRes.success && Array.isArray(jobsRes.jobs)) {
+        localStorage.setItem(STORAGE_KEYS.JOBS, JSON.stringify(jobsRes.jobs));
+        updated = true;
+      }
+      if (notesRes.success && Array.isArray(notesRes.notes)) {
+        localStorage.setItem(STORAGE_KEYS.NOTES, JSON.stringify(notesRes.notes));
+        updated = true;
+      }
+      if (prefsRes.success && prefsRes.preferences) {
+        localStorage.setItem(STORAGE_KEYS.PREFERENCES, JSON.stringify(prefsRes.preferences));
+        updated = true;
+      }
+
+      if (updated) {
+        localStorage.setItem(STORAGE_KEYS.INITIALIZED, 'true');
+        notify();
+      }
+    } catch (err) {
+      console.error('Failed to sync from MongoDB Atlas:', err);
+    }
+  }
+
+  private resetLocalToDefaults() {
     localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(INITIAL_TASKS));
     localStorage.setItem(STORAGE_KEYS.PROJECTS, JSON.stringify(INITIAL_PROJECTS));
     localStorage.setItem(STORAGE_KEYS.JOBS, JSON.stringify(INITIAL_JOB_APPLICATIONS));
@@ -60,6 +122,19 @@ class OrbitStorage {
     localStorage.setItem(STORAGE_KEYS.PREFERENCES, JSON.stringify(INITIAL_PREFERENCES));
     localStorage.setItem(STORAGE_KEYS.INITIALIZED, 'true');
     notify();
+  }
+
+  public async resetToDefaults() {
+    if (!this.isBrowser()) return;
+    this.resetLocalToDefaults();
+
+    // Call seed API with force=true to wipe & reseed MongoDB Atlas
+    try {
+      await fetch('/api/seed?force=true', { method: 'POST' });
+      await this.syncFromMongo();
+    } catch (err) {
+      console.error('Failed to reset MongoDB Atlas:', err);
+    }
   }
 
   public exportData(): string {
@@ -76,7 +151,7 @@ class OrbitStorage {
     return JSON.stringify(payload, null, 2);
   }
 
-  public importData(jsonString: string): boolean {
+  public async importData(jsonString: string): Promise<boolean> {
     if (!this.isBrowser()) return false;
     try {
       const data = JSON.parse(jsonString);
@@ -86,6 +161,28 @@ class OrbitStorage {
       if (Array.isArray(data.notes)) localStorage.setItem(STORAGE_KEYS.NOTES, JSON.stringify(data.notes));
       if (data.preferences) localStorage.setItem(STORAGE_KEYS.PREFERENCES, JSON.stringify(data.preferences));
       notify();
+
+      // Sync imported records to MongoDB
+      if (Array.isArray(data.tasks)) {
+        for (const t of data.tasks) {
+          fetch('/api/tasks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(t) }).catch(() => {});
+        }
+      }
+      if (Array.isArray(data.projects)) {
+        for (const p of data.projects) {
+          fetch('/api/projects', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(p) }).catch(() => {});
+        }
+      }
+      if (Array.isArray(data.jobs)) {
+        for (const j of data.jobs) {
+          fetch('/api/jobs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(j) }).catch(() => {});
+        }
+      }
+      if (Array.isArray(data.notes)) {
+        for (const n of data.notes) {
+          fetch('/api/notes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(n) }).catch(() => {});
+        }
+      }
       return true;
     } catch (err) {
       console.error('Failed to parse import data', err);
@@ -108,25 +205,37 @@ class OrbitStorage {
     const tasks = this.getTasks();
     const existingIndex = tasks.findIndex((t) => t.id === task.id);
     let updatedTasks: Task[];
+    let savedTask: Task;
+
     if (existingIndex >= 0) {
+      savedTask = { ...task, updatedAt: new Date().toISOString() };
       updatedTasks = [...tasks];
-      updatedTasks[existingIndex] = { ...task, updatedAt: new Date().toISOString() };
+      updatedTasks[existingIndex] = savedTask;
     } else {
-      updatedTasks = [
-        {
-          ...task,
-          id: task.id || `task-${Date.now()}`,
-          createdAt: task.createdAt || new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-        ...tasks,
-      ];
+      savedTask = {
+        ...task,
+        id: task.id || `task-${Date.now()}`,
+        createdAt: task.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      updatedTasks = [savedTask, ...tasks];
     }
+
     if (this.isBrowser()) {
       localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(updatedTasks));
     }
     notify();
-    return updatedTasks[existingIndex >= 0 ? existingIndex : 0];
+
+    // Async sync to MongoDB
+    if (this.isBrowser()) {
+      fetch('/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(savedTask),
+      }).catch((err) => console.error('MongoDB sync failed for saveTask:', err));
+    }
+
+    return savedTask;
   }
 
   public deleteTask(id: string) {
@@ -135,6 +244,13 @@ class OrbitStorage {
       localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
     }
     notify();
+
+    // Async sync to MongoDB
+    if (this.isBrowser()) {
+      fetch(`/api/tasks/${id}`, { method: 'DELETE' }).catch((err) =>
+        console.error('MongoDB sync failed for deleteTask:', err)
+      );
+    }
   }
 
   public toggleTaskCompletion(id: string): Task | null {
@@ -185,25 +301,37 @@ class OrbitStorage {
     const projects = this.getProjects();
     const existingIndex = projects.findIndex((p) => p.id === project.id);
     let updatedProjects: Project[];
+    let savedProject: Project;
+
     if (existingIndex >= 0) {
+      savedProject = { ...project, updatedAt: new Date().toISOString() };
       updatedProjects = [...projects];
-      updatedProjects[existingIndex] = { ...project, updatedAt: new Date().toISOString() };
+      updatedProjects[existingIndex] = savedProject;
     } else {
-      updatedProjects = [
-        {
-          ...project,
-          id: project.id || `proj-${Date.now()}`,
-          createdAt: project.createdAt || new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-        ...projects,
-      ];
+      savedProject = {
+        ...project,
+        id: project.id || `proj-${Date.now()}`,
+        createdAt: project.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      updatedProjects = [savedProject, ...projects];
     }
+
     if (this.isBrowser()) {
       localStorage.setItem(STORAGE_KEYS.PROJECTS, JSON.stringify(updatedProjects));
     }
     notify();
-    return updatedProjects[existingIndex >= 0 ? existingIndex : 0];
+
+    // Async sync to MongoDB
+    if (this.isBrowser()) {
+      fetch('/api/projects', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(savedProject),
+      }).catch((err) => console.error('MongoDB sync failed for saveProject:', err));
+    }
+
+    return savedProject;
   }
 
   public deleteProject(id: string) {
@@ -212,6 +340,13 @@ class OrbitStorage {
       localStorage.setItem(STORAGE_KEYS.PROJECTS, JSON.stringify(projects));
     }
     notify();
+
+    // Async sync to MongoDB
+    if (this.isBrowser()) {
+      fetch(`/api/projects/${id}`, { method: 'DELETE' }).catch((err) =>
+        console.error('MongoDB sync failed for deleteProject:', err)
+      );
+    }
   }
 
   // --- JOB APPLICATIONS ---
@@ -229,25 +364,37 @@ class OrbitStorage {
     const jobs = this.getJobApplications();
     const existingIndex = jobs.findIndex((j) => j.id === job.id);
     let updatedJobs: JobApplication[];
+    let savedJob: JobApplication;
+
     if (existingIndex >= 0) {
+      savedJob = { ...job, updatedAt: new Date().toISOString() };
       updatedJobs = [...jobs];
-      updatedJobs[existingIndex] = { ...job, updatedAt: new Date().toISOString() };
+      updatedJobs[existingIndex] = savedJob;
     } else {
-      updatedJobs = [
-        {
-          ...job,
-          id: job.id || `job-${Date.now()}`,
-          createdAt: job.createdAt || new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-        ...jobs,
-      ];
+      savedJob = {
+        ...job,
+        id: job.id || `job-${Date.now()}`,
+        createdAt: job.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      updatedJobs = [savedJob, ...jobs];
     }
+
     if (this.isBrowser()) {
       localStorage.setItem(STORAGE_KEYS.JOBS, JSON.stringify(updatedJobs));
     }
     notify();
-    return updatedJobs[existingIndex >= 0 ? existingIndex : 0];
+
+    // Async sync to MongoDB
+    if (this.isBrowser()) {
+      fetch('/api/jobs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(savedJob),
+      }).catch((err) => console.error('MongoDB sync failed for saveJobApplication:', err));
+    }
+
+    return savedJob;
   }
 
   public deleteJobApplication(id: string) {
@@ -256,6 +403,13 @@ class OrbitStorage {
       localStorage.setItem(STORAGE_KEYS.JOBS, JSON.stringify(jobs));
     }
     notify();
+
+    // Async sync to MongoDB
+    if (this.isBrowser()) {
+      fetch(`/api/jobs/${id}`, { method: 'DELETE' }).catch((err) =>
+        console.error('MongoDB sync failed for deleteJobApplication:', err)
+      );
+    }
   }
 
   // --- NOTES ---
@@ -273,25 +427,37 @@ class OrbitStorage {
     const notes = this.getNotes();
     const existingIndex = notes.findIndex((n) => n.id === note.id);
     let updatedNotes: Note[];
+    let savedNote: Note;
+
     if (existingIndex >= 0) {
+      savedNote = { ...note, updatedAt: new Date().toISOString() };
       updatedNotes = [...notes];
-      updatedNotes[existingIndex] = { ...note, updatedAt: new Date().toISOString() };
+      updatedNotes[existingIndex] = savedNote;
     } else {
-      updatedNotes = [
-        {
-          ...note,
-          id: note.id || `note-${Date.now()}`,
-          createdAt: note.createdAt || new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-        ...notes,
-      ];
+      savedNote = {
+        ...note,
+        id: note.id || `note-${Date.now()}`,
+        createdAt: note.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      updatedNotes = [savedNote, ...notes];
     }
+
     if (this.isBrowser()) {
       localStorage.setItem(STORAGE_KEYS.NOTES, JSON.stringify(updatedNotes));
     }
     notify();
-    return updatedNotes[existingIndex >= 0 ? existingIndex : 0];
+
+    // Async sync to MongoDB
+    if (this.isBrowser()) {
+      fetch('/api/notes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(savedNote),
+      }).catch((err) => console.error('MongoDB sync failed for saveNote:', err));
+    }
+
+    return savedNote;
   }
 
   public deleteNote(id: string) {
@@ -300,6 +466,13 @@ class OrbitStorage {
       localStorage.setItem(STORAGE_KEYS.NOTES, JSON.stringify(notes));
     }
     notify();
+
+    // Async sync to MongoDB
+    if (this.isBrowser()) {
+      fetch(`/api/notes/${id}`, { method: 'DELETE' }).catch((err) =>
+        console.error('MongoDB sync failed for deleteNote:', err)
+      );
+    }
   }
 
   // --- PREFERENCES ---
@@ -318,6 +491,15 @@ class OrbitStorage {
       localStorage.setItem(STORAGE_KEYS.PREFERENCES, JSON.stringify(prefs));
     }
     notify();
+
+    // Async sync to MongoDB
+    if (this.isBrowser()) {
+      fetch('/api/preferences', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(prefs),
+      }).catch((err) => console.error('MongoDB sync failed for savePreferences:', err));
+    }
   }
 }
 

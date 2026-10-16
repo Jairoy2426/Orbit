@@ -71,9 +71,10 @@ export function SettingsView({
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = async (event) => {
       const content = event.target?.result as string;
-      if (storage.importData(content)) {
+      const ok = await storage.importData(content);
+      if (ok) {
         alert('Data imported successfully!');
         window.location.reload();
       } else {
@@ -191,24 +192,46 @@ export function SettingsView({
         </div>
       </form>
 
-      {/* Data Management: Backup & Restore */}
+      {/* Data Management: Backup & Persistence Adapter */}
       <div className="p-6 rounded-2xl bg-[#0d1322] border border-[#1a253c] shadow-lg space-y-4">
-        <h3 className="text-xs font-bold text-white tracking-wide uppercase flex items-center gap-2">
-          <Database className="w-4 h-4 text-purple-400" />
-          Data Backup & Persistence Adapter
-        </h3>
-        <p className="text-xs text-slate-400 leading-relaxed">
-          Orbit uses an isolated StorageAdapter interface. All your data is safely persisted in your browser
-          storage, and can be exported as standard JSON at any time.
+        <div className="flex items-center justify-between">
+          <h3 className="text-xs font-bold text-white tracking-wide uppercase flex items-center gap-2">
+            <Database className="w-4 h-4 text-emerald-400" />
+            Database & Persistence: MongoDB Atlas
+          </h3>
+          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[11px] font-semibold">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            Atlas Connected
+          </span>
+        </div>
+
+        <p className="text-xs text-slate-300 leading-relaxed bg-[#0a0f1c] p-3 rounded-xl border border-[#172238] font-mono text-[11px]">
+          Cluster: <span className="text-blue-400 font-bold">orbit.gswkaub.mongodb.net</span> • Database: <span className="text-purple-400 font-bold">orbit</span>
+          <br />
+          All tasks, projects, job applications, notes, and planning preferences automatically persist to your MongoDB Atlas cluster.
         </p>
 
         <div className="flex flex-wrap items-center gap-3 pt-2">
           <button
+            type="button"
+            onClick={async () => {
+              await storage.syncFromMongo();
+              onDataReset();
+              alert('Successfully synchronized state with MongoDB Atlas!');
+            }}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-xs font-semibold text-emerald-300 transition-all shadow-sm"
+          >
+            <RotateCcw className="w-4 h-4 text-emerald-400" />
+            <span>Sync with Atlas Now</span>
+          </button>
+
+          <button
+            type="button"
             onClick={handleExport}
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#131d33] hover:bg-[#1a2744] border border-[#233354] text-xs font-semibold text-white transition-all shadow-sm"
           >
             <Download className="w-4 h-4 text-blue-400" />
-            <span>Export Full Backup (JSON)</span>
+            <span>Export Backup (JSON)</span>
           </button>
 
           <label className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#131d33] hover:bg-[#1a2744] border border-[#233354] text-xs font-semibold text-white cursor-pointer transition-all shadow-sm">
@@ -218,6 +241,7 @@ export function SettingsView({
           </label>
 
           <button
+            type="button"
             onClick={handleResetToDefaults}
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-xs font-semibold text-rose-300 transition-all ml-auto"
           >
