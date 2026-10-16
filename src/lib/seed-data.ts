@@ -1,7 +1,7 @@
 import { Task, Project, JobApplication, Note, PlanningPreferences } from '@/types';
 
 export const INITIAL_PREFERENCES: PlanningPreferences = {
-  userName: 'Hercules',
+  userName: 'Jai',
   userTitle: 'Full-Stack Developer & Analyst',
   workingDays: [1, 2, 3, 4, 5], // Monday to Friday
   dailyCapacityHours: 7.5,
@@ -21,7 +21,7 @@ export const INITIAL_PROJECTS: Project[] = [
     priority: 'high',
     startDate: '2026-09-15',
     deadline: '2026-11-15',
-    color: '#f43f5e', // Rose
+    color: '#ffffff',
     milestones: [
       { id: 'm-w-1', title: 'Content Editor V1', dueDate: '2026-10-01', completed: true },
       { id: 'm-w-2', title: 'Article Page Redesign', dueDate: '2026-10-18', completed: true },
@@ -42,7 +42,7 @@ export const INITIAL_PROJECTS: Project[] = [
     priority: 'medium',
     startDate: '2026-10-01',
     deadline: '2026-11-30',
-    color: '#0ea5e9', // Sky/Teal
+    color: '#d4d4d4',
     milestones: [
       { id: 'm-g-1', title: 'Design System & Homepage Wireframes', dueDate: '2026-10-12', completed: true },
       { id: 'm-g-2', title: 'Homepage Hero & Search Filter', dueDate: '2026-10-20', completed: false },
@@ -60,7 +60,7 @@ export const INITIAL_PROJECTS: Project[] = [
     priority: 'high',
     startDate: '2026-08-10',
     deadline: '2026-10-25',
-    color: '#3b82f6', // Electric Blue
+    color: '#a3a3a3',
     milestones: [
       { id: 'm-l-1', title: 'SSL Certificate & Header Security', dueDate: '2026-09-20', completed: true },
       { id: 'm-l-2', title: 'Bug Fixes & Responsive Fixes', dueDate: '2026-10-16', completed: false },
@@ -78,7 +78,7 @@ export const INITIAL_PROJECTS: Project[] = [
     priority: 'critical',
     startDate: '2026-10-05',
     deadline: '2026-10-31',
-    color: '#8b5cf6', // Purple
+    color: '#737373',
     milestones: [
       { id: 'm-r-1', title: 'Draft V2 Technical Resume', dueDate: '2026-10-16', completed: false },
       { id: 'm-r-2', title: 'Add Orbit to Portfolio', dueDate: '2026-10-22', completed: false },
@@ -414,11 +414,11 @@ export const INITIAL_NOTES: Note[] = [
     id: 'note-3',
     title: 'Genesis Design Tokens & Color Palette',
     content: `### Genesis Real Estate Brand Guide:
-- Primary: #0ea5e9 (Cyan / Electric Sky)
-- Deep Background: #0b1120
-- Surface Cards: #131d35
+- Primary: #FFFFFF (Pure White)
+- Deep Background: #080808 (Near-black)
+- Surface Cards: #111111 (Charcoal with #222222 subtle borders)
 - Typography: Inter Display + Plus Jakarta Sans
-- Target aesthetic: High-end luxury properties, dark mode first, subtle glass accents.`,
+- Target aesthetic: High-end luxury properties, strict monochrome, subtle glass accents.`,
     tags: ['genesis', 'ui', 'design-tokens'],
     category: 'Project Doc',
     linkedProjectId: 'proj-genesis',

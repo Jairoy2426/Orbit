@@ -29,7 +29,7 @@ export function WeeklyCalendarPreview({
   const [weekOffset, setWeekOffset] = useState(0);
   const todayStr = getTodayDateString();
 
-  // Oct 12 - Oct 18, 2026 week definition (Week 42)
+  // Oct 12 - Oct 19, 2026 week definition matching reference
   const days = [
     { dayName: 'Mon', dayNum: 12, dateStr: '2026-10-12' },
     { dayName: 'Tue', dayNum: 13, dateStr: '2026-10-13' },
@@ -40,7 +40,6 @@ export function WeeklyCalendarPreview({
     { dayName: 'Sun', dayNum: 19, dateStr: '2026-10-19' },
   ];
 
-  // Specific event mock items matching the exact reference image if not yet populated:
   const getTasksForDate = (dateStr: string, dayNum: number): CalendarPreviewItem[] => {
     const liveTasks = tasks.filter((t) => t.dueDate === dateStr);
     if (liveTasks.length > 0) {
@@ -48,46 +47,41 @@ export function WeeklyCalendarPreview({
         id: t.id,
         title: t.title.length > 14 ? t.title.slice(0, 14) + '...' : t.title,
         time: t.dueTime || '10:00',
-        color:
-          t.priority === 'critical' || t.priority === 'high'
-            ? 'bg-rose-500/20 text-rose-300 border-rose-500/30'
-            : t.projectId
-            ? 'bg-blue-500/20 text-blue-300 border-blue-500/30'
-            : 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+        color: 'bg-[#1c1c1c] text-neutral-200 border-[#2b2b2b]',
         rawTask: t,
       }));
     }
 
-    // Reference image visual previews per day
+    // Reference image visual preview items per day (all grayscale)
     switch (dayNum) {
       case 12:
         return [
-          { id: 'p-1', title: 'Fix LSSC', time: '10:00', color: 'bg-sky-500/20 text-sky-300 border-sky-500/30' },
-          { id: 'p-2', title: 'Gym', time: '18:00', color: 'bg-purple-500/20 text-purple-300 border-purple-500/30' },
+          { id: 'p-1', title: 'Fix LSSC', time: '10:00', color: 'bg-[#1a1a1a] text-neutral-300 border-[#262626]' },
+          { id: 'p-2', title: 'Gym', time: '18:00', color: 'bg-[#1a1a1a] text-neutral-300 border-[#262626]' },
         ];
       case 13:
         return [
-          { id: 'p-3', title: 'Job search', time: '10:00', color: 'bg-blue-500/20 text-blue-300 border-blue-500/30' },
-          { id: 'p-4', title: 'Resume', time: '14:00', color: 'bg-rose-500/20 text-rose-300 border-rose-500/30' },
+          { id: 'p-3', title: 'Job search', time: '10:00', color: 'bg-[#1a1a1a] text-neutral-300 border-[#262626]' },
+          { id: 'p-4', title: 'Resume', time: '14:00', color: 'bg-[#1a1a1a] text-neutral-300 border-[#262626]' },
         ];
       case 14:
         return [
-          { id: 'p-5', title: 'Interview', time: '11:30', color: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' },
-          { id: 'p-6', title: 'Weazel News', time: '16:00', color: 'bg-blue-500/20 text-blue-300 border-blue-500/30' },
+          { id: 'p-5', title: 'Interview', time: '11:30', color: 'bg-[#1a1a1a] text-neutral-300 border-[#262626]' },
+          { id: 'p-6', title: 'Weazel News', time: '16:00', color: 'bg-[#1a1a1a] text-neutral-300 border-[#262626]' },
         ];
       case 16:
         return [
-          { id: 'p-7', title: 'Genesis', time: '10:00', color: 'bg-amber-500/20 text-amber-300 border-amber-500/30' },
-          { id: 'p-8', title: 'Content', time: '15:00', color: 'bg-purple-500/20 text-purple-300 border-purple-500/30' },
+          { id: 'p-7', title: 'Genesis', time: '10:00', color: 'bg-[#1f1f1f] text-neutral-200 border-[#2e2e2e]' },
+          { id: 'p-8', title: 'Content', time: '15:00', color: 'bg-[#1f1f1f] text-neutral-200 border-[#2e2e2e]' },
         ];
       case 17:
         return [
-          { id: 'p-9', title: 'Follow up', time: '10:00', color: 'bg-rose-500/20 text-rose-300 border-rose-500/30' },
-          { id: 'p-10', title: 'Review', time: '16:30', color: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30' },
+          { id: 'p-9', title: 'Follow up', time: '10:00', color: 'bg-[#1a1a1a] text-neutral-300 border-[#262626]' },
+          { id: 'p-10', title: 'Review', time: '16:30', color: 'bg-[#1a1a1a] text-neutral-300 border-[#262626]' },
         ];
       case 19:
         return [
-          { id: 'p-11', title: 'Plan week', time: '19:00', color: 'bg-teal-500/20 text-teal-300 border-teal-500/30' },
+          { id: 'p-11', title: 'Plan week', time: '19:00', color: 'bg-[#1a1a1a] text-neutral-300 border-[#262626]' },
         ];
       default:
         return [];
@@ -95,31 +89,31 @@ export function WeeklyCalendarPreview({
   };
 
   return (
-    <div className="rounded-2xl bg-[#0d1322] border border-[#1a253c] p-4 md:p-5 shadow-lg space-y-4">
+    <div className="rounded-2xl bg-[#111111] border border-[#222222] p-4 md:p-5 shadow-md space-y-4">
       {/* Calendar Header with Navigation */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1 text-xs font-bold text-white">
             <button
               onClick={() => setWeekOffset(weekOffset - 1)}
-              className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-[#162035] transition-colors"
+              className="p-1 rounded-md text-neutral-400 hover:text-white hover:bg-[#1a1a1a] transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <span>This Week</span>
             <button
               onClick={() => setWeekOffset(weekOffset + 1)}
-              className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-[#162035] transition-colors"
+              className="p-1 rounded-md text-neutral-400 hover:text-white hover:bg-[#1a1a1a] transition-colors"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-          <span className="text-xs font-medium text-slate-400">Oct 2026</span>
+          <span className="text-xs font-medium text-neutral-500">Oct 2026</span>
         </div>
 
         <button
           onClick={onOpenFullCalendar}
-          className="text-xs font-semibold text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors"
+          className="text-xs font-semibold text-neutral-400 hover:text-white flex items-center gap-1 transition-colors"
         >
           View full calendar
           <ArrowRight className="w-3.5 h-3.5" />
@@ -138,16 +132,16 @@ export function WeeklyCalendarPreview({
               onClick={() => onSelectDate?.(d.dateStr)}
               className={`p-2 rounded-xl flex flex-col justify-between min-h-[140px] cursor-pointer transition-all border ${
                 isToday
-                  ? 'bg-[#111c33] border-blue-500/40 shadow-sm'
-                  : 'bg-[#0a0f1c] border-[#172238] hover:border-[#273756]'
+                  ? 'bg-[#161616] border-[#383838] shadow-sm'
+                  : 'bg-[#0d0d0d] border-[#1e1e1e] hover:border-[#2a2a2a]'
               }`}
             >
               {/* Day Header */}
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[10px] uppercase font-bold text-slate-400">{d.dayName}</span>
+                <span className="text-[10px] uppercase font-bold text-neutral-500">{d.dayName}</span>
                 <span
                   className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                    isToday ? 'bg-blue-600 text-white shadow-md shadow-blue-500/40' : 'text-slate-300'
+                    isToday ? 'bg-white text-black shadow-sm' : 'text-neutral-400'
                   }`}
                 >
                   {d.dayNum}
@@ -165,16 +159,16 @@ export function WeeklyCalendarPreview({
                         onSelectTask?.(item.rawTask);
                       }
                     }}
-                    className={`px-1.5 py-1 rounded-md text-[10px] font-semibold border truncate leading-tight shadow-sm hover:brightness-110 transition-all ${item.color}`}
+                    className={`px-1.5 py-1 rounded-md text-[10px] font-medium border truncate leading-tight transition-all ${item.color}`}
                     title={`${item.title} (${item.time})`}
                   >
-                    <div className="truncate">{item.title}</div>
-                    <div className="text-[9px] opacity-75">{item.time}</div>
+                    <div className="truncate font-semibold text-neutral-200">{item.title}</div>
+                    <div className="text-[9px] text-neutral-500">{item.time}</div>
                   </div>
                 ))}
 
                 {isToday && dayCards.length >= 2 && (
-                  <div className="text-[9px] font-bold text-center text-blue-400/80 bg-blue-500/10 rounded py-0.5 border border-blue-500/20">
+                  <div className="text-[9px] font-bold text-center text-neutral-400 bg-[#1c1c1c] rounded py-0.5 border border-[#2b2b2b]">
                     +2 more
                   </div>
                 )}

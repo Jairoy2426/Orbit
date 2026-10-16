@@ -32,7 +32,7 @@ const ProjectSchema = new Schema<IProjectDocument>(
     },
     startDate: { type: String },
     deadline: { type: String },
-    color: { type: String, default: '#3b82f6' },
+    color: { type: String, default: '#ffffff' },
     milestones: { type: [MilestoneSchema], default: [] },
     notes: { type: String },
     repoUrl: { type: String },

@@ -22,7 +22,6 @@ export function RightSidebar({
 }: RightSidebarProps) {
   const [currentMonthIndex] = useState(9); // Oct (0-indexed 9)
   const daysInOct = 31;
-  const startDayOfWeek = 4; // Oct 1, 2026 was a Thursday (index 4: Sun=0, Mon=1, Tue=2, Wed=3, Thu=4)
 
   // Map dates with tasks
   const tasksByDate = new Map<number, number>();
@@ -42,8 +41,6 @@ export function RightSidebar({
       title: 'Follow up — TechCorp',
       category: 'Job Application',
       time: '10:00 - 11:00',
-      accentColor: 'border-l-rose-500',
-      tagColor: 'text-rose-400 bg-rose-500/10',
     },
     {
       id: 'up-2',
@@ -52,8 +49,6 @@ export function RightSidebar({
       title: 'Interview — Nova Systems',
       category: 'Interview',
       time: '11:00 - 12:00',
-      accentColor: 'border-l-amber-500',
-      tagColor: 'text-amber-400 bg-amber-500/10',
     },
     {
       id: 'up-3',
@@ -62,8 +57,6 @@ export function RightSidebar({
       title: 'Job search session',
       category: 'Recurring Habit',
       time: '10:00 - 11:00',
-      accentColor: 'border-l-blue-500',
-      tagColor: 'text-blue-400 bg-blue-500/10',
     },
     {
       id: 'up-4',
@@ -72,27 +65,25 @@ export function RightSidebar({
       title: 'Genesis — Client review',
       category: 'Project Milestone',
       time: '16:00 - 17:00',
-      accentColor: 'border-l-emerald-500',
-      tagColor: 'text-emerald-400 bg-emerald-500/10',
     },
   ];
 
   return (
-    <aside className="hidden xl:flex flex-col w-80 border-l border-[#1a253c] bg-[#090d16] p-4 space-y-6 shrink-0 select-none overflow-y-auto">
+    <aside className="hidden xl:flex flex-col w-80 border-l border-[#1f1f1f] bg-[#090909] p-4 space-y-6 shrink-0 select-none overflow-y-auto">
       {/* Monthly Mini Calendar Widget */}
-      <div className="p-4 rounded-2xl bg-[#0d1322] border border-[#1a253c]">
+      <div className="p-4 rounded-2xl bg-[#111111] border border-[#222222]">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <CalendarIcon className="w-4 h-4 text-blue-400" />
+            <CalendarIcon className="w-4 h-4 text-white" />
             <h3 className="text-xs font-bold text-white tracking-wide">Calendar</h3>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-medium text-slate-300">Oct 2026</span>
+            <span className="text-xs font-medium text-neutral-300">Oct 2026</span>
             <div className="flex items-center gap-0.5">
-              <button className="p-1 rounded text-slate-400 hover:text-white hover:bg-[#162035] transition-colors">
+              <button className="p-1 rounded text-neutral-400 hover:text-white hover:bg-[#1f1f1f] transition-colors">
                 <ChevronLeft className="w-3.5 h-3.5" />
               </button>
-              <button className="p-1 rounded text-slate-400 hover:text-white hover:bg-[#162035] transition-colors">
+              <button className="p-1 rounded text-neutral-400 hover:text-white hover:bg-[#1f1f1f] transition-colors">
                 <ChevronRight className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -100,7 +91,7 @@ export function RightSidebar({
         </div>
 
         {/* Calendar Day Headers */}
-        <div className="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold text-slate-400 mb-2">
+        <div className="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold text-neutral-500 mb-2">
           <span>S</span>
           <span>M</span>
           <span>T</span>
@@ -113,8 +104,8 @@ export function RightSidebar({
         {/* Days Grid */}
         <div className="grid grid-cols-7 gap-1 text-center text-xs">
           {/* Previous month padding (4 days for Thu start) */}
-          {[27, 28, 29, 30].map((d) => (
-            <div key={`prev-${d}`} className="py-1 text-slate-600 text-[11px]">
+          {[28, 29, 30].map((d) => (
+            <div key={`prev-${d}`} className="py-1 text-neutral-700 text-[11px]">
               {d}
             </div>
           ))}
@@ -132,15 +123,15 @@ export function RightSidebar({
                 onClick={() => onSelectDate?.(dayStr)}
                 className={`relative py-1 rounded-lg text-[11px] font-medium transition-all flex flex-col items-center justify-center ${
                   isToday
-                    ? 'bg-blue-600 text-white font-bold shadow-md shadow-blue-500/30'
+                    ? 'bg-white text-black font-bold shadow-md'
                     : isSelected
-                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/40'
-                    : 'text-slate-300 hover:bg-[#141d31] hover:text-white'
+                    ? 'bg-[#222222] text-white border border-[#444444]'
+                    : 'text-neutral-400 hover:bg-[#1c1c1c] hover:text-white'
                 }`}
               >
                 <span>{day}</span>
                 {hasTasks && !isToday && (
-                  <span className="w-1 h-1 rounded-full bg-blue-400 mt-0.5" />
+                  <span className="w-1 h-1 rounded-full bg-neutral-400 mt-0.5" />
                 )}
               </button>
             );
@@ -151,13 +142,13 @@ export function RightSidebar({
       {/* Upcoming Section */}
       <div className="space-y-3 flex-1">
         <div className="flex items-center justify-between">
-          <h3 className="text-xs font-bold text-white flex items-center gap-1.5 tracking-wide">
-            <span className="w-2 h-2 rounded-full bg-blue-500 inline-block" />
+          <h3 className="text-xs font-bold text-white flex items-center gap-2 tracking-wide">
+            <span className="w-2 h-2 rounded-full bg-white inline-block" />
             Upcoming
           </h3>
           <button
             onClick={onOpenCalendar}
-            className="text-[11px] font-semibold text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors"
+            className="text-[11px] font-semibold text-neutral-400 hover:text-white flex items-center gap-1 transition-colors"
           >
             View all
             <ArrowRight className="w-3 h-3" />
@@ -168,24 +159,24 @@ export function RightSidebar({
           {upcomingEvents.map((evt) => (
             <div
               key={evt.id}
-              className={`p-3 rounded-xl bg-[#0d1322] border border-[#1a253c] border-l-4 ${evt.accentColor} hover:border-[#273756] transition-all group flex items-start gap-3`}
+              className="p-3 rounded-xl bg-[#111111] border border-[#222222] border-l-4 border-l-white hover:border-[#383838] transition-all group flex items-start gap-3"
             >
               {/* Date Block */}
               <div className="text-center shrink-0 w-8">
                 <span className="text-sm font-bold text-white block leading-tight">{evt.date}</span>
-                <span className="text-[10px] text-slate-400 uppercase font-semibold">{evt.month}</span>
+                <span className="text-[10px] text-neutral-500 uppercase font-semibold">{evt.month}</span>
               </div>
 
               {/* Event Details */}
               <div className="flex-1 min-w-0">
-                <h4 className="text-xs font-semibold text-slate-100 truncate group-hover:text-blue-400 transition-colors">
+                <h4 className="text-xs font-semibold text-neutral-100 truncate group-hover:text-white transition-colors">
                   {evt.title}
                 </h4>
                 <div className="flex items-center gap-2 mt-1">
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${evt.tagColor}`}>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded font-medium text-neutral-300 bg-[#1f1f1f] border border-[#2b2b2b]">
                     {evt.category}
                   </span>
-                  <span className="text-[10px] text-slate-400">{evt.time}</span>
+                  <span className="text-[10px] text-neutral-500">{evt.time}</span>
                 </div>
               </div>
             </div>

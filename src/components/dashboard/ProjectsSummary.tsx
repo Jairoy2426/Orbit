@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { FolderKanban, Plus, ArrowRight, ExternalLink } from 'lucide-react';
+import { FolderKanban, Plus, ArrowRight, Layers } from 'lucide-react';
 import { Project, Task } from '@/types';
 
 interface ProjectsSummaryProps {
@@ -19,14 +19,12 @@ export function ProjectsSummary({
   onNewProject,
   onSelectProject,
 }: ProjectsSummaryProps) {
-  // Calculate progress % based on linked tasks or milestones
   const getProjectProgress = (project: Project) => {
     const projectTasks = tasks.filter((t) => t.projectId === project.id);
     if (projectTasks.length > 0) {
       const done = projectTasks.filter((t) => t.status === 'done').length;
       return Math.round((done / projectTasks.length) * 100);
     }
-    // Fallback to milestones
     if (project.milestones && project.milestones.length > 0) {
       const doneM = project.milestones.filter((m) => m.completed).length;
       return Math.round((doneM / project.milestones.length) * 100);
@@ -35,12 +33,12 @@ export function ProjectsSummary({
   };
 
   return (
-    <div className="rounded-2xl bg-[#0d1322] border border-[#1a253c] p-4 md:p-5 shadow-lg space-y-4">
+    <div className="rounded-2xl bg-[#111111] border border-[#222222] p-4 md:p-5 shadow-md space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-purple-500/15 text-purple-400 flex items-center justify-center border border-purple-500/30">
-            <FolderKanban className="w-4 h-4" />
+          <div className="w-7 h-7 rounded-lg bg-[#1a1a1a] text-white flex items-center justify-center border border-[#2a2a2a]">
+            <FolderKanban className="w-4 h-4 text-white" />
           </div>
           <h3 className="text-xs font-bold text-white tracking-wide">Projects</h3>
         </div>
@@ -48,14 +46,14 @@ export function ProjectsSummary({
         <div className="flex items-center gap-2">
           <button
             onClick={onViewAllProjects}
-            className="text-xs font-semibold text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors"
+            className="text-xs font-semibold text-neutral-400 hover:text-white flex items-center gap-1 transition-colors"
           >
             View all
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={onNewProject}
-            className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-[#162035] transition-colors"
+            className="p-1 rounded-md text-neutral-500 hover:text-white hover:bg-[#1a1a1a] transition-colors"
             title="Create Project"
           >
             <Plus className="w-4 h-4" />
@@ -72,35 +70,31 @@ export function ProjectsSummary({
             <div
               key={p.id}
               onClick={() => onSelectProject(p.id)}
-              className="p-3 rounded-xl bg-[#0a0f1c] border border-[#172238] hover:border-[#273756] transition-all cursor-pointer group"
+              className="p-3 rounded-xl bg-[#0d0d0d] border border-[#1e1e1e] hover:border-[#333333] transition-all cursor-pointer group"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div
-                    className="w-3 h-3 rounded-full shrink-0"
-                    style={{ backgroundColor: p.color || '#3b82f6' }}
-                  />
+                  <div className="w-7 h-7 rounded-lg bg-[#1c1c1c] border border-[#2a2a2a] flex items-center justify-center shrink-0 text-white">
+                    <Layers className="w-3.5 h-3.5" />
+                  </div>
                   <div className="truncate">
-                    <h4 className="text-xs font-bold text-slate-200 group-hover:text-blue-400 transition-colors truncate">
+                    <h4 className="text-xs font-bold text-neutral-200 group-hover:text-white transition-colors truncate">
                       {p.name}
                     </h4>
-                    <p className="text-[10px] text-slate-400 truncate">{p.description}</p>
+                    <p className="text-[10px] text-neutral-500 truncate">{p.description}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-xs font-mono font-bold text-slate-300">{progress}%</span>
+                  <span className="text-xs font-mono font-bold text-neutral-300">{progress}%</span>
                 </div>
               </div>
 
-              {/* Progress Bar */}
-              <div className="w-full bg-[#162035] h-1.5 rounded-full mt-2.5 overflow-hidden">
+              {/* Monochrome Progress Bar */}
+              <div className="w-full bg-[#1c1c1c] h-1.5 rounded-full mt-2.5 overflow-hidden">
                 <div
-                  className="h-full rounded-full transition-all duration-500"
-                  style={{
-                    width: `${progress}%`,
-                    backgroundColor: p.color || '#3b82f6',
-                  }}
+                  className="h-full rounded-full transition-all duration-500 bg-white"
+                  style={{ width: `${progress}%` }}
                 />
               </div>
             </div>

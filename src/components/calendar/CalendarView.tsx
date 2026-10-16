@@ -6,7 +6,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Plus,
-  Filter,
   Clock,
   Briefcase,
   FolderKanban,
@@ -33,14 +32,11 @@ export function CalendarView({
   onSelectDateToCreateTask,
 }: CalendarViewProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('month');
-  const [currentYear] = useState(2026);
-  const [currentMonthIndex] = useState(9); // Oct 2026
   const [selectedDay, setSelectedDay] = useState<number>(16);
   const [categoryFilter, setCategoryFilter] = useState<'all' | 'project' | 'career' | 'routine'>('all');
 
   const todayStr = getTodayDateString();
   const daysInMonth = 31;
-  const startDayOfWeek = 4; // Oct 1, 2026 starts on Thursday (index 4)
 
   // Map events to date string
   const getEventsForDate = (dateStr: string) => {
@@ -67,21 +63,21 @@ export function CalendarView({
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">Schedule & Calendar</h2>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-neutral-400 mt-0.5">
             Visualize deadlines, job follow-ups, and recurring habits on a unified timeline.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           {/* Navigation Controls */}
-          <div className="flex items-center bg-[#0d1322] border border-[#1a253c] p-1 rounded-xl">
-            <button className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#162035] transition-colors">
+          <div className="flex items-center bg-[#111111] border border-[#222222] p-1 rounded-xl">
+            <button className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-[#1a1a1a] transition-colors">
               <ChevronLeft className="w-4 h-4" />
             </button>
             <span className="px-3 text-xs font-bold text-white tracking-wide">
               October 2026
             </span>
-            <button className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#162035] transition-colors">
+            <button className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-[#1a1a1a] transition-colors">
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
@@ -89,7 +85,7 @@ export function CalendarView({
           {/* Today Button */}
           <button
             onClick={() => setSelectedDay(16)}
-            className="px-3 py-1.5 rounded-xl bg-[#0d1322] border border-[#1a253c] text-xs font-semibold text-blue-400 hover:text-white hover:border-blue-500/50 transition-colors"
+            className="px-3 py-1.5 rounded-xl bg-[#111111] border border-[#222222] text-xs font-semibold text-white hover:border-neutral-500 transition-colors"
           >
             Today
           </button>
@@ -97,7 +93,7 @@ export function CalendarView({
           {/* New Task Button */}
           <button
             onClick={() => onOpenTaskModal()}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white hover:bg-neutral-200 text-black text-xs font-bold shadow-sm active:scale-95 transition-all"
           >
             <Plus className="w-4 h-4 stroke-[3]" />
             <span>Schedule Task</span>
@@ -106,14 +102,14 @@ export function CalendarView({
       </div>
 
       {/* View Switcher & Category Filter Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-2xl bg-[#0d1322] border border-[#1a253c]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-2xl bg-[#111111] border border-[#222222]">
         <div className="flex items-center gap-1">
           <button
             onClick={() => setViewMode('month')}
             className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               viewMode === 'month'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white hover:bg-[#162035]'
+                ? 'bg-white text-black font-bold shadow-sm'
+                : 'text-neutral-400 hover:text-white hover:bg-[#1a1a1a]'
             }`}
           >
             Month
@@ -122,8 +118,8 @@ export function CalendarView({
             onClick={() => setViewMode('week')}
             className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               viewMode === 'week'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white hover:bg-[#162035]'
+                ? 'bg-white text-black font-bold shadow-sm'
+                : 'text-neutral-400 hover:text-white hover:bg-[#1a1a1a]'
             }`}
           >
             Week
@@ -132,8 +128,8 @@ export function CalendarView({
             onClick={() => setViewMode('day')}
             className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               viewMode === 'day'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white hover:bg-[#162035]'
+                ? 'bg-white text-black font-bold shadow-sm'
+                : 'text-neutral-400 hover:text-white hover:bg-[#1a1a1a]'
             }`}
           >
             Day
@@ -146,8 +142,8 @@ export function CalendarView({
             onClick={() => setCategoryFilter('all')}
             className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
               categoryFilter === 'all'
-                ? 'bg-[#1e2a44] text-white font-bold'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-white text-black font-bold border border-white'
+                : 'text-neutral-400 hover:text-white bg-[#161616] border border-[#252525]'
             }`}
           >
             All Categories
@@ -156,8 +152,8 @@ export function CalendarView({
             onClick={() => setCategoryFilter('project')}
             className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
               categoryFilter === 'project'
-                ? 'bg-blue-600/20 text-blue-400 font-bold border border-blue-500/40'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-white text-black font-bold border border-white'
+                : 'text-neutral-400 hover:text-white bg-[#161616] border border-[#252525]'
             }`}
           >
             Projects
@@ -166,8 +162,8 @@ export function CalendarView({
             onClick={() => setCategoryFilter('career')}
             className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
               categoryFilter === 'career'
-                ? 'bg-purple-600/20 text-purple-400 font-bold border border-purple-500/40'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-white text-black font-bold border border-white'
+                : 'text-neutral-400 hover:text-white bg-[#161616] border border-[#252525]'
             }`}
           >
             Career & Interviews
@@ -176,8 +172,8 @@ export function CalendarView({
             onClick={() => setCategoryFilter('routine')}
             className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
               categoryFilter === 'routine'
-                ? 'bg-emerald-600/20 text-emerald-400 font-bold border border-emerald-500/40'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-white text-black font-bold border border-white'
+                : 'text-neutral-400 hover:text-white bg-[#161616] border border-[#252525]'
             }`}
           >
             Habits & Routines
@@ -187,9 +183,9 @@ export function CalendarView({
 
       {/* MONTH VIEW */}
       {viewMode === 'month' && (
-        <div className="rounded-2xl bg-[#0d1322] border border-[#1a253c] p-4 shadow-lg overflow-hidden">
+        <div className="rounded-2xl bg-[#111111] border border-[#222222] p-4 shadow-sm overflow-hidden">
           {/* Day Headers */}
-          <div className="grid grid-cols-7 gap-2 text-center text-xs font-bold text-slate-400 pb-3 border-b border-[#151f33]">
+          <div className="grid grid-cols-7 gap-2 text-center text-xs font-bold text-neutral-400 pb-3 border-b border-[#1c1c1c]">
             <span>Sunday</span>
             <span>Monday</span>
             <span>Tuesday</span>
@@ -205,7 +201,7 @@ export function CalendarView({
             {[27, 28, 29, 30].map((d) => (
               <div
                 key={`prior-${d}`}
-                className="min-h-[105px] p-2 rounded-xl bg-[#080d17]/50 border border-[#121a2c] text-slate-600 text-xs select-none"
+                className="min-h-[105px] p-2 rounded-xl bg-[#0a0a0a]/50 border border-[#181818] text-neutral-600 text-xs select-none"
               >
                 <span>{d}</span>
               </div>
@@ -224,17 +220,21 @@ export function CalendarView({
                   onClick={() => setSelectedDay(day)}
                   className={`min-h-[105px] p-2 rounded-xl border flex flex-col justify-between transition-all cursor-pointer group ${
                     isToday
-                      ? 'bg-[#111c33] border-blue-500/40 shadow-md'
+                      ? 'bg-[#181818] border-neutral-400 shadow-sm'
                       : isSelected
-                      ? 'bg-[#0f172a] border-blue-400/50'
-                      : 'bg-[#0a0f1c] border-[#162137] hover:border-[#273756]'
+                      ? 'bg-[#151515] border-neutral-500'
+                      : 'bg-[#0c0c0c] border-[#202020] hover:border-[#383838]'
                   }`}
                 >
                   {/* Day number header */}
                   <div className="flex items-center justify-between mb-1.5">
                     <span
-                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                        isToday ? 'bg-blue-600 text-white' : 'text-slate-300'
+                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                        isToday
+                          ? 'bg-white text-black font-bold shadow-sm'
+                          : isSelected
+                          ? 'bg-neutral-800 text-white font-bold'
+                          : 'text-neutral-400'
                       }`}
                     >
                       {day}
@@ -245,7 +245,7 @@ export function CalendarView({
                         e.stopPropagation();
                         onSelectDateToCreateTask?.(dateStr);
                       }}
-                      className="opacity-0 group-hover:opacity-100 p-0.5 rounded text-slate-400 hover:text-white transition-opacity"
+                      className="opacity-0 group-hover:opacity-100 p-0.5 rounded text-neutral-400 hover:text-white transition-opacity"
                       title="Add task on this date"
                     >
                       <Plus className="w-3.5 h-3.5" />
@@ -258,7 +258,7 @@ export function CalendarView({
                     {dayJobs.map((j) => (
                       <div
                         key={j.id}
-                        className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30 truncate"
+                        className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#222222] text-neutral-200 border border-[#333333] truncate"
                         title={`${j.company} — ${j.status.replace('_', ' ')}`}
                       >
                         💼 {j.company}
@@ -275,12 +275,10 @@ export function CalendarView({
                         }}
                         className={`px-1.5 py-0.5 rounded text-[10px] font-semibold border truncate transition-all ${
                           t.status === 'done'
-                            ? 'bg-slate-800/50 text-slate-500 line-through border-slate-700/50'
+                            ? 'bg-[#141414] text-neutral-500 line-through border-[#202020]'
                             : t.priority === 'critical' || t.priority === 'high'
-                            ? 'bg-rose-500/20 text-rose-300 border-rose-500/30'
-                            : t.projectId
-                            ? 'bg-blue-500/20 text-blue-300 border-blue-500/30'
-                            : 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30'
+                            ? 'bg-white text-black border-white font-bold'
+                            : 'bg-[#1a1a1a] text-neutral-300 border-[#282828]'
                         }`}
                         title={t.title}
                       >
@@ -296,9 +294,9 @@ export function CalendarView({
       )}
 
       {/* Selected Day Agenda Drawer */}
-      <div className="p-4 rounded-2xl bg-[#0d1322] border border-[#1a253c] shadow-lg space-y-3">
+      <div className="p-4 rounded-2xl bg-[#111111] border border-[#222222] shadow-sm space-y-3">
         <h3 className="text-xs font-bold text-white tracking-wide flex items-center gap-2">
-          <CalendarIcon className="w-4 h-4 text-blue-400" />
+          <CalendarIcon className="w-4 h-4 text-white" />
           Agenda for 2026-10-{selectedDay.toString().padStart(2, '0')}
         </h3>
 
@@ -309,7 +307,7 @@ export function CalendarView({
 
             if (dayTasks.length === 0 && dayJobs.length === 0) {
               return (
-                <p className="text-xs text-slate-500 py-3 col-span-2">
+                <p className="text-xs text-neutral-500 py-3 col-span-2">
                   No scheduled tasks or interviews on this day.
                 </p>
               );
@@ -320,18 +318,18 @@ export function CalendarView({
                 {dayJobs.map((j) => (
                   <div
                     key={j.id}
-                    className="p-3 rounded-xl bg-[#0a0f1c] border border-purple-500/30 flex items-center justify-between"
+                    className="p-3 rounded-xl bg-[#0c0c0c] border border-[#262626] flex items-center justify-between"
                   >
                     <div>
-                      <span className="text-[10px] font-bold uppercase text-purple-400 block">
+                      <span className="text-[10px] font-bold uppercase text-neutral-400 block">
                         Career Activity
                       </span>
                       <h4 className="text-xs font-bold text-white mt-0.5">
                         {j.company} — {j.role}
                       </h4>
-                      <p className="text-[10px] text-slate-400">{j.interviewStage || 'Follow-up'}</p>
+                      <p className="text-[10px] text-neutral-400">{j.interviewStage || 'Follow-up'}</p>
                     </div>
-                    <span className="text-xs font-mono text-purple-300">{j.interviewDate || 'All Day'}</span>
+                    <span className="text-xs font-mono text-neutral-300">{j.interviewDate || 'All Day'}</span>
                   </div>
                 ))}
 
@@ -339,18 +337,18 @@ export function CalendarView({
                   <div
                     key={t.id}
                     onClick={() => onOpenTaskModal(t)}
-                    className="p-3 rounded-xl bg-[#0a0f1c] border border-[#172238] hover:border-blue-500/40 cursor-pointer flex items-center justify-between"
+                    className="p-3 rounded-xl bg-[#0c0c0c] border border-[#222222] hover:border-[#383838] cursor-pointer flex items-center justify-between transition-colors"
                   >
                     <div>
-                      <span className="text-[10px] font-bold uppercase text-blue-400 block">
+                      <span className="text-[10px] font-bold uppercase text-neutral-400 block">
                         {t.projectId ? 'Project Task' : 'Personal Task'}
                       </span>
                       <h4 className="text-xs font-bold text-white mt-0.5">{t.title}</h4>
-                      <p className="text-[10px] text-slate-400 font-mono">
+                      <p className="text-[10px] text-neutral-400 font-mono">
                         {t.dueTime || 'No time specified'} • {t.estimatedEffortHours}h effort
                       </p>
                     </div>
-                    <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
+                    <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-[#1a1a1a] text-neutral-300 border border-[#282828]">
                       {t.priority}
                     </span>
                   </div>

@@ -11,7 +11,6 @@ import {
   Clock,
   Flag,
   Tag,
-  Link as LinkIcon,
 } from 'lucide-react';
 import { Task, JobApplication, Project, Note, Priority } from '@/types';
 import { parseNaturalDateString, getTodayDateString } from '@/lib/date-utils';
@@ -57,7 +56,6 @@ export function QuickCaptureModal({
   const [salaryNotes, setSalaryNotes] = useState('');
   const [jobUrl, setJobUrl] = useState('');
 
-  // Close on Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -121,7 +119,7 @@ export function QuickCaptureModal({
         description: description.trim() || 'Project created via capture',
         status: 'planning',
         priority,
-        color: '#3b82f6',
+        color: '#ffffff',
         milestones: [],
       });
     } else if (tab === 'note') {
@@ -135,7 +133,6 @@ export function QuickCaptureModal({
       });
     }
 
-    // Reset & close
     setTitle('');
     setDescription('');
     setCompany('');
@@ -145,17 +142,17 @@ export function QuickCaptureModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
-      <div className="relative w-full max-w-xl rounded-2xl bg-[#0d1322] border border-[#22304d] shadow-2xl overflow-hidden animate-scale-up">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+      <div className="relative w-full max-w-xl rounded-2xl bg-[#111111] border border-[#262626] shadow-2xl overflow-hidden">
         {/* Header with Type Tabs */}
-        <div className="flex items-center justify-between border-b border-[#1b2740] px-5 py-3.5 bg-[#090e18]">
-          <div className="flex items-center gap-1.5 bg-[#121a2d] p-1 rounded-xl border border-[#1e2a44]">
+        <div className="flex items-center justify-between border-b border-[#202020] px-5 py-3.5 bg-[#0a0a0a]">
+          <div className="flex items-center gap-1.5 bg-[#161616] p-1 rounded-xl border border-[#262626]">
             <button
               onClick={() => setTab('task')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 tab === 'task'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-white text-black font-bold shadow-sm'
+                  : 'text-neutral-400 hover:text-white'
               }`}
             >
               <CheckSquare className="w-3.5 h-3.5" />
@@ -165,8 +162,8 @@ export function QuickCaptureModal({
               onClick={() => setTab('job')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 tab === 'job'
-                  ? 'bg-purple-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-white text-black font-bold shadow-sm'
+                  : 'text-neutral-400 hover:text-white'
               }`}
             >
               <Briefcase className="w-3.5 h-3.5" />
@@ -176,8 +173,8 @@ export function QuickCaptureModal({
               onClick={() => setTab('project')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 tab === 'project'
-                  ? 'bg-cyan-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-white text-black font-bold shadow-sm'
+                  : 'text-neutral-400 hover:text-white'
               }`}
             >
               <FolderKanban className="w-3.5 h-3.5" />
@@ -187,8 +184,8 @@ export function QuickCaptureModal({
               onClick={() => setTab('note')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 tab === 'note'
-                  ? 'bg-amber-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-white text-black font-bold shadow-sm'
+                  : 'text-neutral-400 hover:text-white'
               }`}
             >
               <FileText className="w-3.5 h-3.5" />
@@ -198,7 +195,7 @@ export function QuickCaptureModal({
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#18233c] transition-colors"
+            className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-[#1f1f1f] transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -209,42 +206,42 @@ export function QuickCaptureModal({
           {tab === 'job' ? (
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-[11px] font-semibold text-slate-400 block mb-1">Company Name</label>
+                <label className="text-[11px] font-semibold text-neutral-400 block mb-1">Company Name</label>
                 <input
                   type="text"
                   required
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
                   placeholder="e.g. Stripe, TechCorp"
-                  className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-[#0d0d0d] border border-[#242424] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-neutral-400"
                 />
               </div>
               <div>
-                <label className="text-[11px] font-semibold text-slate-400 block mb-1">Role Title</label>
+                <label className="text-[11px] font-semibold text-neutral-400 block mb-1">Role Title</label>
                 <input
                   type="text"
                   required
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                   placeholder="e.g. Senior Frontend Engineer"
-                  className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-[#0d0d0d] border border-[#242424] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-neutral-400"
                 />
               </div>
               <div className="col-span-2">
-                <label className="text-[11px] font-semibold text-slate-400 block mb-1">Job Post URL</label>
+                <label className="text-[11px] font-semibold text-neutral-400 block mb-1">Job Post URL</label>
                 <input
                   type="url"
                   value={jobUrl}
                   onChange={(e) => setJobUrl(e.target.value)}
                   placeholder="https://company.com/careers/..."
-                  className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-[#0d0d0d] border border-[#242424] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-neutral-400"
                 />
               </div>
             </div>
           ) : (
             <div>
-              <label className="text-[11px] font-semibold text-slate-400 block mb-1">
-                {tab === 'task' ? 'Title (natural phrases like "Fix bug tomorrow" supported)' : 'Title'}
+              <label className="text-[11px] font-semibold text-neutral-400 block mb-1">
+                {tab === 'task' ? 'Title' : 'Title'}
               </label>
               <input
                 type="text"
@@ -259,14 +256,14 @@ export function QuickCaptureModal({
                     ? 'Project name'
                     : 'Note title'
                 }
-                className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500"
+                className="w-full bg-[#0d0d0d] border border-[#242424] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-neutral-400"
                 autoFocus
               />
             </div>
           )}
 
           <div>
-            <label className="text-[11px] font-semibold text-slate-400 block mb-1">
+            <label className="text-[11px] font-semibold text-neutral-400 block mb-1">
               Description / Notes (Optional)
             </label>
             <textarea
@@ -274,7 +271,7 @@ export function QuickCaptureModal({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Add key context, requirements or reminders..."
-              className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-3.5 py-2 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-blue-500 resize-none"
+              className="w-full bg-[#0d0d0d] border border-[#242424] rounded-xl px-3.5 py-2 text-xs text-neutral-200 placeholder:text-neutral-500 focus:outline-none focus:border-neutral-400 resize-none"
             />
           </div>
 
@@ -283,14 +280,14 @@ export function QuickCaptureModal({
             <>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <div>
-                  <label className="text-[11px] font-semibold text-slate-400 flex items-center gap-1 mb-1">
-                    <Flag className="w-3 h-3 text-amber-400" />
+                  <label className="text-[11px] font-semibold text-neutral-400 flex items-center gap-1 mb-1">
+                    <Flag className="w-3 h-3 text-neutral-400" />
                     Priority
                   </label>
                   <select
                     value={priority}
                     onChange={(e) => setPriority(e.target.value as Priority)}
-                    className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-[#0d0d0d] border border-[#242424] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-neutral-400"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -300,21 +297,21 @@ export function QuickCaptureModal({
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-semibold text-slate-400 flex items-center gap-1 mb-1">
-                    <Calendar className="w-3 h-3 text-blue-400" />
+                  <label className="text-[11px] font-semibold text-neutral-400 flex items-center gap-1 mb-1">
+                    <Calendar className="w-3 h-3 text-neutral-400" />
                     Due Date
                   </label>
                   <input
                     type="date"
                     value={dueDate}
                     onChange={(e) => setDueDate(e.target.value)}
-                    className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-[#0d0d0d] border border-[#242424] rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-neutral-400"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-semibold text-slate-400 flex items-center gap-1 mb-1">
-                    <Clock className="w-3 h-3 text-purple-400" />
+                  <label className="text-[11px] font-semibold text-neutral-400 flex items-center gap-1 mb-1">
+                    <Clock className="w-3 h-3 text-neutral-400" />
                     Effort (Hours)
                   </label>
                   <input
@@ -323,21 +320,21 @@ export function QuickCaptureModal({
                     min="0.25"
                     value={estimatedEffort}
                     onChange={(e) => setEstimatedEffort(e.target.value)}
-                    className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-[#0d0d0d] border border-[#242424] rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-neutral-400"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-semibold text-slate-400 flex items-center gap-1 mb-1">
-                    <Tag className="w-3 h-3 text-teal-400" />
+                  <label className="text-[11px] font-semibold text-neutral-400 flex items-center gap-1 mb-1">
+                    <Tag className="w-3 h-3 text-neutral-400" />
                     Tags
                   </label>
                   <input
                     type="text"
                     value={tags}
                     onChange={(e) => setTags(e.target.value)}
-                    placeholder="dev, urgent"
-                    className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                    placeholder="dev, client"
+                    className="w-full bg-[#0d0d0d] border border-[#242424] rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-neutral-400"
                   />
                 </div>
               </div>
@@ -345,14 +342,13 @@ export function QuickCaptureModal({
               {/* Project / Job Linking */}
               <div className="grid grid-cols-2 gap-3 pt-1">
                 <div>
-                  <label className="text-[11px] font-semibold text-slate-400 flex items-center gap-1 mb-1">
-                    <FolderKanban className="w-3 h-3 text-blue-400" />
+                  <label className="text-[11px] font-semibold text-neutral-400 block mb-1">
                     Link to Project
                   </label>
                   <select
                     value={projectId}
                     onChange={(e) => setProjectId(e.target.value)}
-                    className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-[#0d0d0d] border border-[#242424] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none"
                   >
                     <option value="">None (Personal)</option>
                     {projects.map((p) => (
@@ -364,14 +360,13 @@ export function QuickCaptureModal({
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-semibold text-slate-400 flex items-center gap-1 mb-1">
-                    <Briefcase className="w-3 h-3 text-purple-400" />
+                  <label className="text-[11px] font-semibold text-neutral-400 block mb-1">
                     Link to Job Application
                   </label>
                   <select
                     value={jobId}
                     onChange={(e) => setJobId(e.target.value)}
-                    className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-[#0d0d0d] border border-[#242424] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none"
                   >
                     <option value="">None</option>
                     {jobs.map((j) => (
@@ -386,8 +381,8 @@ export function QuickCaptureModal({
           )}
 
           {/* Modal Footer */}
-          <div className="flex items-center justify-between pt-3 border-t border-[#1b2740]">
-            <span className="text-[11px] text-slate-500">
+          <div className="flex items-center justify-between pt-3 border-t border-[#202020]">
+            <span className="text-[11px] text-neutral-500">
               {tab === 'task' && !dueDate ? 'Will enter Inbox triage.' : 'Will be saved immediately.'}
             </span>
 
@@ -395,13 +390,13 @@ export function QuickCaptureModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-[#162035] transition-colors"
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-neutral-400 hover:text-white hover:bg-[#1a1a1a] transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
+                className="px-5 py-2 rounded-xl bg-white hover:bg-neutral-200 text-black text-xs font-bold transition-all active:scale-95 shadow-sm"
               >
                 Capture {tab.toUpperCase()}
               </button>

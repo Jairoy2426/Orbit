@@ -1,23 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #080c14;
-  --surface-1: #0d1322;
-  --surface-2: #121a2d;
-  --surface-3: #18233c;
-  --border-subtle: #1c273e;
-  --border-medium: #273756;
-  --foreground: #f1f5f9;
-  --foreground-muted: #94a3b8;
-  --foreground-dim: #64748b;
+  --background: #080808;
+  --surface-1: #111111;
+  --surface-2: #161616;
+  --surface-3: #1f1f1f;
+  --border-subtle: #222222;
+  --border-medium: #2e2e2e;
+  --border-strong: #404040;
+  --foreground: #f5f5f5;
+  --foreground-muted: #a3a3a3;
+  --foreground-dim: #737373;
 
-  --accent-blue: #3b82f6;
-  --accent-blue-hover: #2563eb;
-  --accent-purple: #8b5cf6;
-  --accent-cyan: #06b6d4;
-  --accent-emerald: #10b981;
-  --accent-rose: #f43f5e;
-  --accent-amber: #f59e0b;
+  --accent-white: #ffffff;
+  --accent-gray-light: #e5e5e5;
+  --accent-gray-med: #525252;
+  --accent-gray-dark: #262626;
 }
 
 body {
@@ -28,29 +26,29 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Scrollbars */
+/* Custom Grayscale Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(13, 19, 34, 0.6);
+  background: #0e0e0e;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(43, 61, 95, 0.7);
+  background: #2a2a2a;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.6);
+  background: #444444;
 }
 
-/* Glass & Card Utilities */
+/* Monochrome Card Utilities */
 .orbit-card {
-  background-color: #0d1322;
-  border: 1px solid #1a253c;
+  background-color: #111111;
+  border: 1px solid #222222;
   border-radius: 0.75rem;
 }
 
@@ -59,14 +57,6 @@ body {
 }
 
 .orbit-card-hover:hover {
-  border-color: #273756;
+  border-color: #333333;
   transform: translateY(-1px);
-}
-
-.glow-blue {
-  box-shadow: 0 0 20px -3px rgba(59, 130, 246, 0.25);
-}
-
-.glow-purple {
-  box-shadow: 0 0 20px -3px rgba(139, 92, 246, 0.25);
 }

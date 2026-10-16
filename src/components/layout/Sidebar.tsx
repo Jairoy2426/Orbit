@@ -12,7 +12,6 @@ import {
   Settings,
   Inbox,
   Compass,
-  Zap,
   ChevronLeft,
   ChevronRight,
   Globe,
@@ -20,6 +19,7 @@ import {
   Newspaper,
   FileBadge,
   ExternalLink,
+  CircleDot,
 } from 'lucide-react';
 import { Task } from '@/types';
 
@@ -80,35 +80,39 @@ export function Sidebar({
 
   return (
     <aside
-      className={`relative flex flex-col justify-between border-r border-[#1a253c] bg-[#090d16] transition-all duration-300 z-30 ${
+      className={`relative flex flex-col justify-between border-r border-[#1f1f1f] bg-[#090909] transition-all duration-300 z-30 ${
         collapsed ? 'w-20' : 'w-64'
       } shrink-0 select-none min-h-screen`}
     >
       {/* Top Header Logo */}
-      <div className="p-4 flex items-center justify-between border-b border-[#151f33]">
+      <div className="p-4 flex items-center justify-between border-b border-[#1a1a1a]">
         <div
           className="flex items-center gap-3 cursor-pointer group"
           onClick={() => onSelectTab('dashboard')}
         >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
-            <Zap className="w-5 h-5 text-white fill-white" />
+          {/* Orbit Monochromatic Planet Logo */}
+          <div className="w-9 h-9 rounded-xl bg-[#171717] border border-[#2a2a2a] flex items-center justify-center group-hover:border-neutral-400 transition-colors">
+            <svg
+              className="w-5 h-5 text-white stroke-current fill-none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="6" />
+              <ellipse cx="12" cy="12" rx="10" ry="3.5" transform="rotate(-25 12 12)" />
+            </svg>
           </div>
           {!collapsed && (
             <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-bold text-lg tracking-wide text-white">Orbit</span>
-                <span className="text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-blue-500/15 text-blue-400 border border-blue-500/30">
-                  HQ
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400 font-medium">Command Center</p>
+              <span className="font-bold text-lg tracking-wide text-white">Orbit</span>
             </div>
           )}
         </div>
 
         <button
           onClick={onToggleCollapse}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#131d33] transition-colors"
+          className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-[#181818] transition-colors"
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
@@ -125,25 +129,25 @@ export function Sidebar({
               <button
                 key={item.id}
                 onClick={() => onSelectTab(item.id as NavTab)}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all group ${
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs md:text-sm font-medium transition-all group ${
                   isActive
-                    ? 'bg-blue-600/15 text-blue-400 border border-blue-500/30 font-semibold'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-[#11192b]'
+                    ? 'bg-[#1a1a1a] text-white border border-[#333333] font-semibold shadow-sm'
+                    : 'text-neutral-400 hover:text-white hover:bg-[#121212]'
                 }`}
                 title={collapsed ? item.label : undefined}
               >
                 <Icon
                   className={`w-4 h-4 shrink-0 transition-colors ${
-                    isActive ? 'text-blue-400' : 'text-slate-400 group-hover:text-slate-200'
+                    isActive ? 'text-white' : 'text-neutral-400 group-hover:text-white'
                   }`}
                 />
                 {!collapsed && <span className="flex-1 text-left">{item.label}</span>}
                 {!collapsed && item.badge !== null && item.badge !== undefined && (
                   <span
-                    className={`text-[11px] px-2 py-0.5 rounded-full font-bold ${
+                    className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
                       isActive
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-[#18233a] text-slate-400 group-hover:text-slate-300'
+                        ? 'bg-white text-black'
+                        : 'bg-[#1c1c1c] text-neutral-400 group-hover:text-neutral-200 border border-[#2a2a2a]'
                     }`}
                   >
                     {item.badge}
@@ -156,9 +160,9 @@ export function Sidebar({
 
         {/* Favourites Section */}
         {!collapsed && (
-          <div className="pt-2 border-t border-[#151f33]">
-            <p className="px-3 pb-2 text-[11px] font-semibold tracking-wider text-slate-400 uppercase">
-              Favourites
+          <div className="pt-2 border-t border-[#1a1a1a]">
+            <p className="px-3 pb-2 text-[10px] font-semibold tracking-wider text-neutral-500 uppercase">
+              Favorites
             </p>
             <div className="space-y-1">
               {favourites.map((fav) => {
@@ -167,9 +171,9 @@ export function Sidebar({
                   <button
                     key={fav.name}
                     onClick={fav.action}
-                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-[#11192b] transition-colors"
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-neutral-400 hover:text-neutral-200 hover:bg-[#121212] transition-colors"
                   >
-                    <Icon className="w-3.5 h-3.5 text-slate-400" />
+                    <Icon className="w-3.5 h-3.5 text-neutral-400" />
                     <span className="truncate">{fav.name}</span>
                   </button>
                 );
@@ -180,22 +184,22 @@ export function Sidebar({
       </div>
 
       {/* User Footer */}
-      <div className="p-3 border-t border-[#151f33] bg-[#070b13]">
+      <div className="p-3 border-t border-[#1a1a1a] bg-[#070707]">
         <div
           onClick={() => onSelectTab('settings')}
-          className="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-[#11192b] transition-colors group"
+          className="flex items-center gap-3 p-2 rounded-xl cursor-pointer hover:bg-[#141414] transition-colors group"
         >
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center font-bold text-white text-xs border border-white/10 shrink-0">
-            H
+          <div className="w-8 h-8 rounded-full bg-[#1c1c1c] border border-[#333333] flex items-center justify-center font-bold text-white text-xs shrink-0">
+            J
           </div>
           {!collapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-slate-200 truncate">Hercules</p>
-              <p className="text-[11px] text-slate-400 truncate">Stay consistent.</p>
+              <p className="text-xs font-semibold text-neutral-200 truncate">Jai Roy</p>
+              <p className="text-[10px] text-neutral-500 truncate">Stay consistent.</p>
             </div>
           )}
           {!collapsed && (
-            <Settings className="w-4 h-4 text-slate-400 group-hover:text-slate-300 transition-colors" />
+            <Settings className="w-4 h-4 text-neutral-500 group-hover:text-neutral-300 transition-colors" />
           )}
         </div>
       </div>

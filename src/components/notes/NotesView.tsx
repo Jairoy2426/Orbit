@@ -5,17 +5,12 @@ import {
   FileText,
   Plus,
   Search,
-  Tag,
   Pin,
   FolderKanban,
   Briefcase,
-  Edit2,
-  Trash2,
   X,
-  ExternalLink,
 } from 'lucide-react';
 import { Note, Project, JobApplication } from '@/types';
-import { formatFriendlyDate } from '@/lib/date-utils';
 
 interface NotesViewProps {
   notes: Note[];
@@ -121,14 +116,14 @@ export function NotesView({
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">Notes & Knowledge</h2>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-neutral-400 mt-0.5">
             Personal technical documentation, interview preparation, and meeting logs.
           </p>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-500/20 active:scale-95 transition-all self-start md:self-auto"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white hover:bg-neutral-200 text-black text-xs font-bold shadow-sm active:scale-95 transition-all self-start md:self-auto"
         >
           <Plus className="w-4 h-4 stroke-[3]" />
           <span>New Note</span>
@@ -136,7 +131,7 @@ export function NotesView({
       </div>
 
       {/* Categories & Search */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-2xl bg-[#0d1322] border border-[#1a253c]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-2xl bg-[#111111] border border-[#222222]">
         <div className="flex items-center gap-1.5 flex-wrap">
           {categories.map((cat) => (
             <button
@@ -144,8 +139,8 @@ export function NotesView({
               onClick={() => setSelectedCategory(cat)}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                 selectedCategory === cat
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-white hover:bg-[#162035]'
+                  ? 'bg-white text-black font-bold shadow-sm'
+                  : 'text-neutral-400 hover:text-white hover:bg-[#1a1a1a]'
               }`}
             >
               {cat}
@@ -154,13 +149,13 @@ export function NotesView({
         </div>
 
         <div className="relative">
-          <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
+          <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-neutral-500" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search notes & tags..."
-            className="bg-[#0a0f1c] border border-[#1e2a44] rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500"
+            className="bg-[#0c0c0c] border border-[#222222] rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-neutral-400 w-full sm:w-60"
           />
         </div>
       </div>
@@ -175,43 +170,43 @@ export function NotesView({
             <div
               key={n.id}
               onClick={() => openEditModal(n)}
-              className="p-5 rounded-2xl bg-[#0d1322] border border-[#1a253c] hover:border-[#273756] transition-all cursor-pointer group flex flex-col justify-between space-y-4 shadow-lg relative"
+              className="p-5 rounded-2xl bg-[#111111] border border-[#222222] hover:border-[#383838] transition-all cursor-pointer group flex flex-col justify-between space-y-4 shadow-sm relative"
             >
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/30">
+                  <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-[#1c1c1c] text-neutral-300 border border-[#2a2a2a]">
                     {n.category}
                   </span>
                   {n.isPinned && (
-                    <span className="flex items-center gap-1 text-[10px] text-amber-400 font-semibold">
-                      <Pin className="w-3 h-3 fill-amber-400" />
+                    <span className="flex items-center gap-1 text-[10px] text-white font-semibold">
+                      <Pin className="w-3 h-3 fill-white" />
                       Pinned
                     </span>
                   )}
                 </div>
 
-                <h3 className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">
+                <h3 className="text-sm font-bold text-white group-hover:text-neutral-200 transition-colors">
                   {n.title}
                 </h3>
 
-                <p className="text-xs text-slate-300 mt-2 line-clamp-4 leading-relaxed font-mono whitespace-pre-wrap">
+                <p className="text-xs text-neutral-300 mt-2 line-clamp-4 leading-relaxed font-mono whitespace-pre-wrap">
                   {n.content}
                 </p>
               </div>
 
               {/* Note Footer */}
-              <div className="space-y-2 pt-3 border-t border-[#151f33]">
+              <div className="space-y-2 pt-3 border-t border-[#1c1c1c]">
                 {/* Linked context */}
                 {(project || job) && (
-                  <div className="flex items-center gap-2 text-[10px] text-slate-400">
+                  <div className="flex items-center gap-2 text-[10px] text-neutral-400">
                     {project && (
-                      <span className="flex items-center gap-1 text-blue-400 truncate">
+                      <span className="flex items-center gap-1 text-neutral-300 truncate">
                         <FolderKanban className="w-3 h-3" />
                         {project.name}
                       </span>
                     )}
                     {job && (
-                      <span className="flex items-center gap-1 text-purple-400 truncate">
+                      <span className="flex items-center gap-1 text-neutral-300 truncate">
                         <Briefcase className="w-3 h-3" />
                         {job.company}
                       </span>
@@ -225,7 +220,7 @@ export function NotesView({
                     {n.tags.map((t) => (
                       <span
                         key={t}
-                        className="text-[9px] px-1.5 py-0.5 rounded bg-[#162035] text-slate-400 font-mono"
+                        className="text-[9px] px-1.5 py-0.5 rounded bg-[#181818] text-neutral-400 border border-[#242424] font-mono"
                       >
                         #{t}
                       </span>
@@ -240,15 +235,15 @@ export function NotesView({
 
       {/* Note Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
-          <div className="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl bg-[#0d1322] border border-[#22304d] shadow-2xl overflow-hidden">
-            <div className="flex items-center justify-between border-b border-[#1b2740] px-5 py-4 bg-[#090e18]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-fade-in">
+          <div className="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl bg-[#111111] border border-[#252525] shadow-2xl overflow-hidden">
+            <div className="flex items-center justify-between border-b border-[#222222] px-5 py-4 bg-[#0a0a0a]">
               <h3 className="text-sm font-bold text-white">
                 {editingNote ? 'Edit Note' : 'Create Note'}
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-white"
+                className="p-1.5 rounded-lg text-neutral-400 hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -256,24 +251,24 @@ export function NotesView({
 
             <form onSubmit={handleSave} className="p-5 space-y-4 overflow-y-auto flex-1">
               <div>
-                <label className="text-xs font-semibold text-slate-400 block mb-1">Title</label>
+                <label className="text-xs font-semibold text-neutral-400 block mb-1">Title</label>
                 <input
                   type="text"
                   required
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Note title..."
-                  className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-3.5 py-2 text-xs text-white placeholder:text-neutral-600 focus:outline-none focus:border-neutral-400"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-semibold text-slate-400 block mb-1">Category</label>
+                  <label className="text-xs font-semibold text-neutral-400 block mb-1">Category</label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value as Note['category'])}
-                    className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none"
+                    className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-neutral-400"
                   >
                     <option value="Interview Prep">Interview Prep</option>
                     <option value="Career">Career</option>
@@ -289,33 +284,33 @@ export function NotesView({
                     id="pinCheck"
                     checked={isPinned}
                     onChange={(e) => setIsPinned(e.target.checked)}
-                    className="w-4 h-4 rounded text-blue-600 bg-slate-900 border-slate-700"
+                    className="w-4 h-4 rounded text-black bg-[#161616] border-[#333] accent-white"
                   />
-                  <label htmlFor="pinCheck" className="text-xs font-semibold text-slate-300 cursor-pointer">
+                  <label htmlFor="pinCheck" className="text-xs font-semibold text-neutral-300 cursor-pointer">
                     Pin note to top
                   </label>
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-400 block mb-1">Content (Markdown)</label>
+                <label className="text-xs font-semibold text-neutral-400 block mb-1">Content (Markdown)</label>
                 <textarea
                   rows={8}
                   required
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   placeholder="Type notes, code snippets, interview prep bullets..."
-                  className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-3.5 py-2.5 text-xs text-slate-200 font-mono focus:outline-none focus:border-blue-500 resize-none leading-relaxed"
+                  className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-3.5 py-2.5 text-xs text-neutral-200 font-mono focus:outline-none focus:border-neutral-400 resize-none leading-relaxed"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-semibold text-slate-400 block mb-1">Link to Project</label>
+                  <label className="text-xs font-semibold text-neutral-400 block mb-1">Link to Project</label>
                   <select
                     value={linkedProjectId}
                     onChange={(e) => setLinkedProjectId(e.target.value)}
-                    className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none"
+                    className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-neutral-400"
                   >
                     <option value="">None</option>
                     {projects.map((p) => (
@@ -327,11 +322,11 @@ export function NotesView({
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-slate-400 block mb-1">Link to Career Record</label>
+                  <label className="text-xs font-semibold text-neutral-400 block mb-1">Link to Career Record</label>
                   <select
                     value={linkedJobId}
                     onChange={(e) => setLinkedJobId(e.target.value)}
-                    className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none"
+                    className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-neutral-400"
                   >
                     <option value="">None</option>
                     {jobs.map((j) => (
@@ -344,17 +339,17 @@ export function NotesView({
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-400 block mb-1">Tags (Comma separated)</label>
+                <label className="text-xs font-semibold text-neutral-400 block mb-1">Tags (Comma separated)</label>
                 <input
                   type="text"
                   value={tags}
                   onChange={(e) => setTags(e.target.value)}
                   placeholder="interview, aws, security"
-                  className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-3 py-2 text-xs text-white focus:outline-none"
+                  className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-3 py-2 text-xs text-white placeholder:text-neutral-600 focus:outline-none focus:border-neutral-400"
                 />
               </div>
 
-              <div className="flex items-center justify-between pt-3 border-t border-[#1b2740]">
+              <div className="flex items-center justify-between pt-3 border-t border-[#222222]">
                 {editingNote ? (
                   <button
                     type="button"
@@ -364,7 +359,7 @@ export function NotesView({
                         setIsModalOpen(false);
                       }
                     }}
-                    className="text-xs text-rose-400 hover:text-rose-300 font-semibold"
+                    className="text-xs text-neutral-400 hover:text-white font-semibold transition-colors"
                   >
                     Delete Note
                   </button>
@@ -376,13 +371,13 @@ export function NotesView({
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2 text-xs text-slate-400 hover:text-white"
+                    className="px-4 py-2 text-xs text-neutral-400 hover:text-white transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold"
+                    className="px-5 py-2 rounded-xl bg-white hover:bg-neutral-200 text-black text-xs font-bold transition-all shadow-sm"
                   >
                     Save Note
                   </button>

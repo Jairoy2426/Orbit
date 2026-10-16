@@ -8,7 +8,6 @@ import {
   Calendar,
   AlertTriangle,
   Clock,
-  Filter,
   Search,
   Check,
   ChevronRight,
@@ -32,12 +31,12 @@ interface TasksViewProps {
 
 type TaskTab = 'kanban' | 'list' | 'today' | 'upcoming' | 'overdue';
 
-const KANBAN_COLUMNS: { id: TaskStatus; label: string; color: string }[] = [
-  { id: 'inbox', label: 'Inbox', color: 'border-slate-500' },
-  { id: 'todo', label: 'To Do', color: 'border-blue-500' },
-  { id: 'in_progress', label: 'In Progress', color: 'border-amber-500' },
-  { id: 'blocked', label: 'Blocked', color: 'border-rose-500' },
-  { id: 'done', label: 'Done', color: 'border-emerald-500' },
+const KANBAN_COLUMNS: { id: TaskStatus; label: string; dotClass: string }[] = [
+  { id: 'inbox', label: 'Inbox', dotClass: 'border-neutral-500 bg-neutral-700' },
+  { id: 'todo', label: 'To Do', dotClass: 'border-neutral-400 bg-neutral-500' },
+  { id: 'in_progress', label: 'In Progress', dotClass: 'border-white bg-white' },
+  { id: 'blocked', label: 'Blocked', dotClass: 'border-neutral-600 bg-neutral-800' },
+  { id: 'done', label: 'Done', dotClass: 'border-neutral-300 bg-neutral-200' },
 ];
 
 export function TasksView({
@@ -77,14 +76,13 @@ export function TasksView({
   const getPriorityBadge = (p: Priority) => {
     switch (p) {
       case 'critical':
-        return 'text-red-400 bg-red-500/15 border-red-500/30';
       case 'high':
-        return 'text-amber-400 bg-amber-500/15 border-amber-500/30';
+        return 'text-black bg-white border-white font-bold';
       case 'medium':
-        return 'text-blue-400 bg-blue-500/15 border-blue-500/30';
+        return 'text-neutral-200 bg-[#262626] border-[#383838]';
       case 'low':
       default:
-        return 'text-slate-400 bg-slate-500/15 border-slate-500/30';
+        return 'text-neutral-400 bg-[#161616] border-[#252525]';
     }
   };
 
@@ -103,14 +101,14 @@ export function TasksView({
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">Task Management</h2>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-neutral-400 mt-0.5">
             Organize, prioritize, and track tasks across projects and career goals.
           </p>
         </div>
 
         <button
           onClick={() => onOpenTaskModal()}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-500/20 active:scale-95 transition-all self-start md:self-auto"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white hover:bg-neutral-200 text-black text-xs font-bold shadow-sm active:scale-95 transition-all self-start md:self-auto"
         >
           <Plus className="w-4 h-4 stroke-[3]" />
           <span>New Task</span>
@@ -118,15 +116,15 @@ export function TasksView({
       </div>
 
       {/* Filter and View Bar */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-3 rounded-2xl bg-[#0d1322] border border-[#1a253c]">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-3 rounded-2xl bg-[#111111] border border-[#222222]">
         {/* View Switcher Tabs */}
         <div className="flex items-center gap-1 overflow-x-auto pb-1 lg:pb-0">
           <button
             onClick={() => setActiveTab('kanban')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               activeTab === 'kanban'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white hover:bg-[#162035]'
+                ? 'bg-white text-black font-bold shadow-sm'
+                : 'text-neutral-400 hover:text-white hover:bg-[#1a1a1a]'
             }`}
           >
             <Kanban className="w-3.5 h-3.5" />
@@ -136,8 +134,8 @@ export function TasksView({
             onClick={() => setActiveTab('list')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               activeTab === 'list'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white hover:bg-[#162035]'
+                ? 'bg-white text-black font-bold shadow-sm'
+                : 'text-neutral-400 hover:text-white hover:bg-[#1a1a1a]'
             }`}
           >
             <List className="w-3.5 h-3.5" />
@@ -147,8 +145,8 @@ export function TasksView({
             onClick={() => setActiveTab('today')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               activeTab === 'today'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white hover:bg-[#162035]'
+                ? 'bg-white text-black font-bold shadow-sm'
+                : 'text-neutral-400 hover:text-white hover:bg-[#1a1a1a]'
             }`}
           >
             <Calendar className="w-3.5 h-3.5" />
@@ -158,8 +156,8 @@ export function TasksView({
             onClick={() => setActiveTab('upcoming')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               activeTab === 'upcoming'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white hover:bg-[#162035]'
+                ? 'bg-white text-black font-bold shadow-sm'
+                : 'text-neutral-400 hover:text-white hover:bg-[#1a1a1a]'
             }`}
           >
             <Clock className="w-3.5 h-3.5" />
@@ -169,8 +167,8 @@ export function TasksView({
             onClick={() => setActiveTab('overdue')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               activeTab === 'overdue'
-                ? 'bg-rose-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white hover:bg-[#162035]'
+                ? 'bg-white text-black font-bold shadow-sm'
+                : 'text-neutral-400 hover:text-white hover:bg-[#1a1a1a]'
             }`}
           >
             <AlertTriangle className="w-3.5 h-3.5" />
@@ -181,20 +179,20 @@ export function TasksView({
         {/* Filters */}
         <div className="flex items-center gap-2 flex-wrap">
           <div className="relative">
-            <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
+            <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-neutral-500" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Filter tasks..."
-              className="bg-[#0a0f1c] border border-[#1e2a44] rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500"
+              className="bg-[#0c0c0c] border border-[#222222] rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-neutral-400"
             />
           </div>
 
           <select
             value={selectedProject}
             onChange={(e) => setSelectedProject(e.target.value)}
-            className="bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none"
+            className="bg-[#0c0c0c] border border-[#222222] rounded-xl px-2.5 py-1.5 text-xs text-neutral-200 focus:outline-none focus:border-neutral-400"
           >
             <option value="all">All Projects</option>
             {projects.map((p) => (
@@ -207,7 +205,7 @@ export function TasksView({
           <select
             value={selectedPriority}
             onChange={(e) => setSelectedPriority(e.target.value)}
-            className="bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none"
+            className="bg-[#0c0c0c] border border-[#222222] rounded-xl px-2.5 py-1.5 text-xs text-neutral-200 focus:outline-none focus:border-neutral-400"
           >
             <option value="all">All Priorities</option>
             <option value="critical">Critical</option>
@@ -228,15 +226,15 @@ export function TasksView({
             return (
               <div
                 key={col.id}
-                className="flex flex-col rounded-2xl bg-[#0a0f1c] border border-[#172238] p-3 min-w-[240px]"
+                className="flex flex-col rounded-2xl bg-[#111111] border border-[#222222] p-3 min-w-[240px]"
               >
                 {/* Column Header */}
-                <div className="flex items-center justify-between pb-3 mb-2 border-b border-[#151f33]">
+                <div className="flex items-center justify-between pb-3 mb-2 border-b border-[#1c1c1c]">
                   <div className="flex items-center gap-2">
-                    <span className={`w-2.5 h-2.5 rounded-full border-2 ${col.color}`} />
+                    <span className={`w-2 h-2 rounded-full border ${col.dotClass}`} />
                     <span className="text-xs font-bold text-white tracking-wide">{col.label}</span>
                   </div>
-                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-[#131d33] text-slate-400 font-bold">
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-[#181818] text-neutral-400 border border-[#252525] font-bold">
                     {colTasks.length}
                   </span>
                 </div>
@@ -251,13 +249,13 @@ export function TasksView({
                     return (
                       <div
                         key={t.id}
-                        className="group p-3 rounded-xl bg-[#0d1322] border border-[#1c273e] hover:border-[#2b3c61] transition-all cursor-pointer shadow-sm space-y-2"
+                        className="group p-3 rounded-xl bg-[#0c0c0c] border border-[#222222] hover:border-[#383838] transition-all cursor-pointer shadow-sm space-y-2"
                         onClick={() => onOpenTaskModal(t)}
                       >
                         <div className="flex items-start justify-between gap-2">
                           <span
                             className={`text-xs font-semibold leading-snug ${
-                              isDone ? 'line-through text-slate-500' : 'text-slate-200'
+                              isDone ? 'line-through text-neutral-500' : 'text-neutral-200'
                             }`}
                           >
                             {t.title}
@@ -270,8 +268,8 @@ export function TasksView({
                             }}
                             className={`w-4 h-4 rounded border flex items-center justify-center transition-all shrink-0 ${
                               isDone
-                                ? 'bg-blue-600 border-blue-500 text-white'
-                                : 'border-slate-600 hover:border-blue-400'
+                                ? 'bg-white border-white text-black'
+                                : 'border-neutral-600 hover:border-neutral-300'
                             }`}
                           >
                             {isDone && <Check className="w-3 h-3 stroke-[3]" />}
@@ -280,20 +278,14 @@ export function TasksView({
 
                         {/* Project / Career pill */}
                         {(project || job) && (
-                          <div className="flex items-center gap-1 text-[10px] text-slate-400">
+                          <div className="flex items-center gap-1 text-[10px] text-neutral-400">
                             {project && (
-                              <span
-                                className="px-1.5 py-0.5 rounded font-medium truncate max-w-[140px]"
-                                style={{
-                                  backgroundColor: `${project.color}15`,
-                                  color: project.color,
-                                }}
-                              >
+                              <span className="px-1.5 py-0.5 rounded font-medium bg-[#1a1a1a] text-neutral-300 border border-[#282828] truncate max-w-[140px]">
                                 {project.name}
                               </span>
                             )}
                             {job && (
-                              <span className="px-1.5 py-0.5 rounded font-medium bg-purple-500/15 text-purple-400 truncate max-w-[140px]">
+                              <span className="px-1.5 py-0.5 rounded font-medium bg-[#1a1a1a] text-neutral-300 border border-[#282828] truncate max-w-[140px]">
                                 {job.company}
                               </span>
                             )}
@@ -301,7 +293,7 @@ export function TasksView({
                         )}
 
                         {/* Card Footer */}
-                        <div className="flex items-center justify-between pt-1 border-t border-[#151f33] text-[10px]">
+                        <div className="flex items-center justify-between pt-1 border-t border-[#1a1a1a] text-[10px]">
                           <span
                             className={`px-1.5 py-0.5 rounded font-bold uppercase border ${getPriorityBadge(
                               t.priority
@@ -314,8 +306,8 @@ export function TasksView({
                             <span
                               className={`font-mono font-medium ${
                                 t.dueDate < todayStr && !isDone
-                                  ? 'text-rose-400 font-bold'
-                                  : 'text-slate-400'
+                                  ? 'text-neutral-200 font-bold underline'
+                                  : 'text-neutral-400'
                               }`}
                             >
                               {formatFriendlyDate(t.dueDate)}
@@ -324,8 +316,8 @@ export function TasksView({
                         </div>
 
                         {/* Quick move buttons */}
-                        <div className="opacity-0 group-hover:opacity-100 transition-opacity pt-1 flex items-center justify-between border-t border-[#131d33]">
-                          <span className="text-[9px] text-slate-500">Move:</span>
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity pt-1 flex items-center justify-between border-t border-[#1a1a1a]">
+                          <span className="text-[9px] text-neutral-500">Move:</span>
                           <div className="flex items-center gap-1">
                             {KANBAN_COLUMNS.filter((c) => c.id !== t.status).map((c) => (
                               <button
@@ -334,7 +326,7 @@ export function TasksView({
                                   e.stopPropagation();
                                   moveTaskStatus(t, c.id);
                                 }}
-                                className="px-1.5 py-0.5 rounded bg-[#162035] text-[9px] text-slate-400 hover:text-white hover:bg-blue-600 transition-colors"
+                                className="px-1.5 py-0.5 rounded bg-[#181818] text-[9px] text-neutral-400 hover:text-white hover:bg-neutral-800 border border-[#242424] transition-colors"
                               >
                                 {c.label.slice(0, 3)}
                               </button>
@@ -351,9 +343,9 @@ export function TasksView({
         </div>
       ) : (
         /* LIST / FILTERED VIEW */
-        <div className="rounded-2xl bg-[#0d1322] border border-[#1a253c] p-4 space-y-2">
+        <div className="rounded-2xl bg-[#111111] border border-[#222222] p-4 space-y-2">
           {filteredTasks.length === 0 ? (
-            <div className="py-12 text-center text-xs text-slate-400">
+            <div className="py-12 text-center text-xs text-neutral-400">
               No tasks match the active filters or view.
             </div>
           ) : (
@@ -366,7 +358,7 @@ export function TasksView({
                 <div
                   key={task.id}
                   onClick={() => onOpenTaskModal(task)}
-                  className="p-3 rounded-xl bg-[#0a0f1c] border border-[#172238] hover:border-[#273756] transition-all cursor-pointer group flex items-center justify-between gap-3"
+                  className="p-3 rounded-xl bg-[#0c0c0c] border border-[#222222] hover:border-[#383838] transition-all cursor-pointer group flex items-center justify-between gap-3"
                 >
                   <div className="flex items-center gap-3 min-w-0 flex-1">
                     <button
@@ -376,8 +368,8 @@ export function TasksView({
                       }}
                       className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all shrink-0 ${
                         isDone
-                          ? 'bg-blue-600 border-blue-500 text-white'
-                          : 'border-slate-600 hover:border-blue-400'
+                          ? 'bg-white border-white text-black'
+                          : 'border-neutral-600 hover:border-neutral-300'
                       }`}
                     >
                       {isDone && <Check className="w-3.5 h-3.5 stroke-[3]" />}
@@ -386,12 +378,12 @@ export function TasksView({
                     <div className="min-w-0 flex-1">
                       <span
                         className={`text-xs md:text-sm font-semibold truncate block ${
-                          isDone ? 'line-through text-slate-500' : 'text-slate-100'
+                          isDone ? 'line-through text-neutral-500' : 'text-neutral-100'
                         }`}
                       >
                         {task.title}
                       </span>
-                      <div className="flex items-center gap-2 mt-0.5 text-[11px] text-slate-400">
+                      <div className="flex items-center gap-2 mt-0.5 text-[11px] text-neutral-400">
                         {project && <span>{project.name}</span>}
                         {job && <span>{job.company}</span>}
                         {task.description && (
@@ -411,12 +403,12 @@ export function TasksView({
                     </span>
 
                     {task.dueDate && (
-                      <span className="text-[11px] text-slate-400 font-mono">
+                      <span className="text-[11px] text-neutral-400 font-mono">
                         {formatFriendlyDate(task.dueDate)}
                       </span>
                     )}
 
-                    <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#162035] text-slate-300 font-medium capitalize">
+                    <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#1a1a1a] text-neutral-300 border border-[#2a2a2a] font-medium capitalize">
                       {task.status.replace('_', ' ')}
                     </span>
                   </div>

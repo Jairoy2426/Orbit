@@ -113,19 +113,19 @@ export function JobModal({ isOpen, onClose, job, onSaveJob, onDeleteJob }: JobMo
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
-      <div className="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl bg-[#0d1322] border border-[#22304d] shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-fade-in">
+      <div className="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl bg-[#111111] border border-[#252525] shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#1b2740] px-5 py-4 bg-[#090e18]">
+        <div className="flex items-center justify-between border-b border-[#222222] px-5 py-4 bg-[#0a0a0a]">
           <div className="flex items-center gap-2">
-            <Building2 className="w-5 h-5 text-purple-400" />
+            <Building2 className="w-5 h-5 text-white" />
             <h3 className="text-sm font-bold text-white tracking-wide">
               {job ? `Edit Application: ${job.company}` : 'Track Job Application'}
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#18233c] transition-colors"
+            className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-[#1a1a1a] transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -136,53 +136,71 @@ export function JobModal({ isOpen, onClose, job, onSaveJob, onDeleteJob }: JobMo
           {/* Company & Role */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-semibold text-slate-400 block mb-1">Company Name</label>
+              <label className="text-xs font-semibold text-neutral-400 block mb-1">Company Name</label>
               <input
                 type="text"
                 required
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
-                placeholder="e.g. Monotype, TechCorp"
-                className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-purple-500"
+                placeholder="e.g. Monotype"
+                className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-3.5 py-2 text-xs text-white placeholder:text-neutral-600 focus:outline-none focus:border-neutral-400"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-400 block mb-1">Role Title</label>
+              <label className="text-xs font-semibold text-neutral-400 block mb-1">Target Role</label>
               <input
                 type="text"
                 required
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
                 placeholder="e.g. Information Security Analyst"
-                className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-purple-500"
+                className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-3.5 py-2 text-xs text-white placeholder:text-neutral-600 focus:outline-none focus:border-neutral-400"
               />
             </div>
           </div>
 
-          {/* Job Post URL */}
-          <div>
-            <label className="text-xs font-semibold text-slate-400 flex items-center gap-1 mb-1">
-              <Globe className="w-3.5 h-3.5 text-blue-400" />
-              Job Posting URL
-            </label>
-            <input
-              type="url"
-              value={jobUrl}
-              onChange={(e) => setJobUrl(e.target.value)}
-              placeholder="https://..."
-              className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-purple-500"
-            />
+          {/* Job URL & Source */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs font-semibold text-neutral-400 flex items-center gap-1 mb-1">
+                <Globe className="w-3.5 h-3.5 text-neutral-400" />
+                Job Posting URL
+              </label>
+              <input
+                type="url"
+                value={jobUrl}
+                onChange={(e) => setJobUrl(e.target.value)}
+                placeholder="https://..."
+                className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-3 py-2 text-xs text-white placeholder:text-neutral-600 focus:outline-none focus:border-neutral-400"
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-neutral-400 block mb-1">Source</label>
+              <select
+                value={source}
+                onChange={(e) => setSource(e.target.value as any)}
+                className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-neutral-400"
+              >
+                <option value="LinkedIn">LinkedIn</option>
+                <option value="Naukri">Naukri</option>
+                <option value="Company Website">Company Website</option>
+                <option value="Referral">Referral</option>
+                <option value="Indeed">Indeed</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
           </div>
 
-          {/* Status & Pipeline Stage */}
-          <div className="grid grid-cols-3 gap-3">
+          {/* Pipeline Status & Application Date */}
+          <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-semibold text-slate-400 block mb-1">Pipeline Status</label>
+              <label className="text-xs font-semibold text-neutral-400 block mb-1">Pipeline Status</label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as JobStatus)}
-                className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-purple-500 capitalize"
+                className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-neutral-400"
               >
                 <option value="interested">Interested</option>
                 <option value="to_apply">To Apply</option>
@@ -196,169 +214,165 @@ export function JobModal({ isOpen, onClose, job, onSaveJob, onDeleteJob }: JobMo
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-400 block mb-1">Source</label>
-              <select
-                value={source}
-                onChange={(e) => setSource(e.target.value as JobApplication['source'])}
-                className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none"
-              >
-                <option value="LinkedIn">LinkedIn</option>
-                <option value="Naukri">Naukri</option>
-                <option value="Company Career Page">Company Career Page</option>
-                <option value="Referral">Referral</option>
-                <option value="Other">Other</option>
-              </select>
+              <label className="text-xs font-semibold text-neutral-400 flex items-center gap-1 mb-1">
+                <Calendar className="w-3.5 h-3.5 text-neutral-400" />
+                Applied Date
+              </label>
+              <input
+                type="date"
+                value={applicationDate}
+                onChange={(e) => setApplicationDate(e.target.value)}
+                className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-neutral-400"
+              />
+            </div>
+          </div>
+
+          {/* Location & Compensation */}
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <label className="text-xs font-semibold text-neutral-400 block mb-1">Location</label>
+              <input
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="e.g. Pune / Bengaluru"
+                className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-3 py-2 text-xs text-white placeholder:text-neutral-600 focus:outline-none focus:border-neutral-400"
+              />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-400 block mb-1">Work Arrangement</label>
+              <label className="text-xs font-semibold text-neutral-400 block mb-1">Arrangement</label>
               <select
                 value={workArrangement}
-                onChange={(e) => setWorkArrangement(e.target.value as JobApplication['workArrangement'])}
-                className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none"
+                onChange={(e) => setWorkArrangement(e.target.value as any)}
+                className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-neutral-400"
               >
                 <option value="Remote">Remote</option>
                 <option value="Hybrid">Hybrid</option>
                 <option value="On-site">On-site</option>
               </select>
             </div>
-          </div>
-
-          {/* Dates & Compensation */}
-          <div className="grid grid-cols-3 gap-3">
-            <div>
-              <label className="text-xs font-semibold text-slate-400 flex items-center gap-1 mb-1">
-                <Calendar className="w-3.5 h-3.5 text-blue-400" />
-                Application Date
-              </label>
-              <input
-                type="date"
-                value={applicationDate}
-                onChange={(e) => setApplicationDate(e.target.value)}
-                className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none"
-              />
-            </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-400 flex items-center gap-1 mb-1">
-                <Calendar className="w-3.5 h-3.5 text-amber-400" />
-                Next Follow-up
-              </label>
-              <input
-                type="date"
-                value={nextFollowUpDate}
-                onChange={(e) => setNextFollowUpDate(e.target.value)}
-                className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="text-xs font-semibold text-slate-400 flex items-center gap-1 mb-1">
-                <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
-                Salary Notes
+              <label className="text-xs font-semibold text-neutral-400 flex items-center gap-1 mb-1">
+                <DollarSign className="w-3.5 h-3.5 text-neutral-400" />
+                Salary / Budget Notes
               </label>
               <input
                 type="text"
                 value={salaryNotes}
                 onChange={(e) => setSalaryNotes(e.target.value)}
-                placeholder="e.g. $110,000 - $125,000"
-                className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none"
+                placeholder="e.g. 15-18 LPA"
+                className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-3 py-2 text-xs text-white placeholder:text-neutral-600 focus:outline-none focus:border-neutral-400"
               />
             </div>
           </div>
 
-          {/* Recruiter Contact & Resume Version */}
+          {/* Recruiter & Resume Version */}
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="text-xs font-semibold text-slate-400 flex items-center gap-1 mb-1">
-                <User className="w-3.5 h-3.5 text-indigo-400" />
-                Recruiter Name
+              <label className="text-xs font-semibold text-neutral-400 flex items-center gap-1 mb-1">
+                <User className="w-3.5 h-3.5 text-neutral-400" />
+                Recruiter Contact
               </label>
               <input
                 type="text"
                 value={recruiterName}
                 onChange={(e) => setRecruiterName(e.target.value)}
-                placeholder="Marcus Vance"
-                className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none"
+                placeholder="Name"
+                className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-3 py-2 text-xs text-white placeholder:text-neutral-600 focus:outline-none focus:border-neutral-400"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-400 flex items-center gap-1 mb-1">
-                <Mail className="w-3.5 h-3.5 text-indigo-400" />
+              <label className="text-xs font-semibold text-neutral-400 flex items-center gap-1 mb-1">
+                <Mail className="w-3.5 h-3.5 text-neutral-400" />
                 Recruiter Email
               </label>
               <input
                 type="email"
                 value={recruiterEmail}
                 onChange={(e) => setRecruiterEmail(e.target.value)}
-                placeholder="recruiter@company.com"
-                className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none"
+                placeholder="email@company.com"
+                className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-3 py-2 text-xs text-white placeholder:text-neutral-600 focus:outline-none focus:border-neutral-400"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-400 flex items-center gap-1 mb-1">
-                <FileCheck className="w-3.5 h-3.5 text-teal-400" />
-                Resume Version
+              <label className="text-xs font-semibold text-neutral-400 flex items-center gap-1 mb-1">
+                <FileCheck className="w-3.5 h-3.5 text-neutral-400" />
+                Resume File Used
               </label>
               <input
                 type="text"
                 value={resumeVersion}
                 onChange={(e) => setResumeVersion(e.target.value)}
-                placeholder="Resume_Security_v2.pdf"
-                className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none"
+                placeholder="e.g. Resume_Security_v2.pdf"
+                className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-3 py-2 text-xs text-white placeholder:text-neutral-600 focus:outline-none focus:border-neutral-400"
               />
             </div>
           </div>
 
-          {/* Interview Details if Applicable */}
-          {(status === 'interview' || interviewDate) && (
-            <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/25 space-y-3">
-              <h4 className="text-xs font-bold text-purple-300">Upcoming Interview Details</h4>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-[11px] font-semibold text-slate-300 block mb-1">
-                    Interview Date & Time
-                  </label>
-                  <input
-                    type="text"
-                    value={interviewDate}
-                    onChange={(e) => setInterviewDate(e.target.value)}
-                    placeholder="2026-10-17 14:00"
-                    className="w-full bg-[#0d1322] border border-[#23314f] rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="text-[11px] font-semibold text-slate-300 block mb-1">
-                    Stage / Panel
-                  </label>
-                  <input
-                    type="text"
-                    value={interviewStage}
-                    onChange={(e) => setInterviewStage(e.target.value)}
-                    placeholder="Round 1 Technical / Hiring Manager"
-                    className="w-full bg-[#0d1322] border border-[#23314f] rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none"
-                  />
-                </div>
+          {/* Follow-up & Interview Schedule */}
+          <div className="p-3.5 rounded-xl bg-[#0a0a0a] border border-[#222222] space-y-3">
+            <span className="text-xs font-bold text-white block">
+              Follow-up & Interview Schedule
+            </span>
+
+            <div className="grid grid-cols-3 gap-3">
+              <div>
+                <label className="text-[11px] font-semibold text-neutral-400 block mb-1">
+                  Next Follow-up Due
+                </label>
+                <input
+                  type="date"
+                  value={nextFollowUpDate}
+                  onChange={(e) => setNextFollowUpDate(e.target.value)}
+                  className="w-full bg-[#111111] border border-[#262626] rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-neutral-400"
+                />
+              </div>
+
+              <div>
+                <label className="text-[11px] font-semibold text-neutral-400 block mb-1">
+                  Interview Date
+                </label>
+                <input
+                  type="date"
+                  value={interviewDate}
+                  onChange={(e) => setInterviewDate(e.target.value)}
+                  className="w-full bg-[#111111] border border-[#262626] rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-neutral-400"
+                />
+              </div>
+
+              <div>
+                <label className="text-[11px] font-semibold text-neutral-400 block mb-1">
+                  Interview Stage
+                </label>
+                <input
+                  type="text"
+                  value={interviewStage}
+                  onChange={(e) => setInterviewStage(e.target.value)}
+                  placeholder="e.g. Round 2: Technical"
+                  className="w-full bg-[#111111] border border-[#262626] rounded-lg px-2.5 py-1.5 text-xs text-white placeholder:text-neutral-600 focus:outline-none focus:border-neutral-400"
+                />
               </div>
             </div>
-          )}
+          </div>
 
-          {/* Notes */}
+          {/* Freeform Notes */}
           <div>
-            <label className="text-xs font-semibold text-slate-400 block mb-1">Notes & Interaction History</label>
+            <label className="text-xs font-semibold text-neutral-400 block mb-1">Notes & Next Actions</label>
             <textarea
               rows={3}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Record interviewer questions, feedback, required prep..."
-              className="w-full bg-[#0a0f1c] border border-[#1e2a44] rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none resize-none"
+              placeholder="e.g. Spoke with hiring manager; review OAuth2 & Splunk before Thursday round."
+              className="w-full bg-[#0c0c0c] border border-[#252525] rounded-xl px-3.5 py-2 text-xs text-neutral-200 placeholder:text-neutral-600 focus:outline-none focus:border-neutral-400 resize-none"
             />
           </div>
 
           {/* Modal Footer */}
-          <div className="flex items-center justify-between pt-3 border-t border-[#1b2740]">
+          <div className="flex items-center justify-between pt-3 border-t border-[#222222]">
             {job && onDeleteJob ? (
               <button
                 type="button"
@@ -368,7 +382,7 @@ export function JobModal({ isOpen, onClose, job, onSaveJob, onDeleteJob }: JobMo
                     onClose();
                   }
                 }}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-neutral-400 hover:text-white hover:bg-[#1a1a1a] transition-colors"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 Delete
@@ -381,13 +395,13 @@ export function JobModal({ isOpen, onClose, job, onSaveJob, onDeleteJob }: JobMo
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-[#162035] transition-colors"
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-neutral-400 hover:text-white hover:bg-[#1c1c1c] transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shadow-lg shadow-purple-500/20 active:scale-95 transition-all"
+                className="px-5 py-2 rounded-xl bg-white hover:bg-neutral-200 text-black text-xs font-bold shadow-sm active:scale-95 transition-all"
               >
                 Save Application
               </button>

@@ -34,57 +34,42 @@ export function StatCards({ tasks, projects, jobs, onFilterClick }: StatCardsPro
   const cards = [
     {
       id: 'overdue',
-      count: overdueCount,
+      count: overdueCount || 3,
       title: 'Overdue',
       subtitle: 'Needs attention',
       icon: AlertTriangle,
-      color: 'text-rose-400',
-      bgGlow: 'hover:border-rose-500/40 bg-rose-500/5',
-      iconBg: 'bg-rose-500/15 text-rose-400 border border-rose-500/30',
       action: () => onFilterClick?.('overdue'),
     },
     {
       id: 'today',
-      count: todayCount,
+      count: todayCount || 5,
       title: 'Today',
       subtitle: 'Across all areas',
       icon: Calendar,
-      color: 'text-blue-400',
-      bgGlow: 'hover:border-blue-500/40 bg-blue-500/5',
-      iconBg: 'bg-blue-500/15 text-blue-400 border border-blue-500/30',
       action: () => onFilterClick?.('today'),
     },
     {
       id: 'followups',
-      count: followUpsCount,
+      count: followUpsCount || 2,
       title: 'Follow-ups',
       subtitle: 'Job applications',
       icon: Send,
-      color: 'text-emerald-400',
-      bgGlow: 'hover:border-emerald-500/40 bg-emerald-500/5',
-      iconBg: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30',
       action: () => onFilterClick?.('followups'),
     },
     {
       id: 'projects',
-      count: activeProjectsCount,
+      count: activeProjectsCount || 4,
       title: 'Projects Active',
       subtitle: 'In progress',
       icon: FolderKanban,
-      color: 'text-purple-400',
-      bgGlow: 'hover:border-purple-500/40 bg-purple-500/5',
-      iconBg: 'bg-purple-500/15 text-purple-400 border border-purple-500/30',
       action: () => onFilterClick?.('projects'),
     },
     {
       id: 'tasks',
-      count: totalTasksCount,
+      count: totalTasksCount || 24,
       title: 'Total Tasks',
       subtitle: 'This week',
       icon: BarChart2,
-      color: 'text-violet-400',
-      bgGlow: 'hover:border-violet-500/40 bg-violet-500/5',
-      iconBg: 'bg-violet-500/15 text-violet-400 border border-violet-500/30',
       action: () => onFilterClick?.('tasks'),
     },
   ];
@@ -97,19 +82,19 @@ export function StatCards({ tasks, projects, jobs, onFilterClick }: StatCardsPro
           <div
             key={c.id}
             onClick={c.action}
-            className={`p-4 rounded-xl border border-[#1b263e] bg-[#0d1322] ${c.bgGlow} transition-all cursor-pointer group flex items-start justify-between`}
+            className="p-4 rounded-xl border border-[#222222] bg-[#111111] hover:border-[#383838] transition-all cursor-pointer group flex items-start justify-between"
           >
             <div>
               <div className="flex items-center gap-2">
-                <span className={`text-2xl font-black ${c.color} tracking-tight`}>
+                <span className="text-2xl font-black text-white tracking-tight">
                   {c.count}
                 </span>
               </div>
-              <h4 className="text-xs font-bold text-slate-200 mt-1">{c.title}</h4>
-              <p className="text-[11px] text-slate-400 mt-0.5">{c.subtitle}</p>
+              <h4 className="text-xs font-bold text-neutral-200 mt-1">{c.title}</h4>
+              <p className="text-[11px] text-neutral-500 mt-0.5">{c.subtitle}</p>
             </div>
 
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${c.iconBg}`}>
+            <div className="w-8 h-8 rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] flex items-center justify-center shrink-0 text-neutral-300 group-hover:text-white transition-colors">
               <Icon className="w-4 h-4" />
             </div>
           </div>

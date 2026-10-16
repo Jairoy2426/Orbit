@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark h-full">
-      <body className="min-h-full bg-[#080c14] text-slate-100 flex flex-col font-sans">
+      <body className="min-h-full bg-[#080808] text-[#f5f5f5] flex flex-col font-sans selection:bg-neutral-700 selection:text-white">
         {children}
       </body>
     </html>
